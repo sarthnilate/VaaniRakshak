@@ -1,302 +1,126 @@
-# VaaniRakshak — Design System
+# Visual & Interaction Design Specifications: VAANIRAKSHAK
 
-## 1. Design Direction
-
-VaaniRakshak should feel like:
-
-**premium Android security + modern AI command center + Indian civic technology**
-
-Not:
-
-- generic banking app
-- cartoonish AI app
-- hacker-themed interface
-- over-decorated dashboard
-
-The product should communicate:
-
-**calm → intelligent → trustworthy → urgent when necessary**
+**Design Philosophy:** Modern Cyber-Security, High-Trust Privacy Aesthetic  
+**Target Interfaces:** Android Jetpack Compose Mobile UI + React 18 / Tailwind Web Command Center  
 
 ---
 
-## 2. Brand
+## 1. Core Color Palette & Design Tokens
 
-Name:
+To deliver a state-of-the-art, premium security experience, VaaniRakshak utilizes a high-contrast dark theme palette with vivid, semantic status indicators:
 
-**VaaniRakshak**
+```gdb
+/* Background & Surface Tokens */
+--color-bg-primary:     #0B0F19   (Obsidian Dark Core)
+--color-bg-secondary:   #111827   (Deep Slate Card Background)
+--color-bg-tertiary:    #1F2937   (Interactive Component Surface)
+--color-border:         #374151   (Subtle Glass Border)
 
-Meaning:
+/* Brand & Accent Tokens */
+--color-brand-cyan:     #06B6D4   (Vibrant Cyber Blue - Primary Accent)
+--color-brand-indigo:   #6366F1   (Deep Intelligence Indigo)
 
-- Vaani = voice
-- Rakshak = protector
-
-Suggested product line:
-
-**Protect the voice. Verify the intent. Stop the threat.**
-
----
-
-## 3. Theme
-
-Primary:
-
-- deep neutral/navy security background
-- clean surfaces
-- high-contrast text
-
-Status colors:
-
-- SAFE → green
-- LOW → neutral/blue
-- MEDIUM → amber
-- HIGH → orange
-- CRITICAL → red
-
-Do not use status colors as decoration. They communicate semantic state.
-
----
-
-## 4. Typography
-
-Android:
-
-- Material 3 typography
-- Roboto/system font
-- clear numerical emphasis for risk score
-
-Dashboard:
-
-- Inter or equivalent modern sans-serif
-- monospace only for technical metrics/logs
-
-Multilingual:
-
-Use fonts with broad Unicode coverage and test:
-
-- Devanagari
-- Bengali
-- Tamil
-- Telugu
-- Kannada
-- Malayalam
-- Gujarati
-- Gurmukhi
-- Arabic
-- CJK
-- Cyrillic
-- Latin
-
-Never assume one font covers every script correctly.
-
----
-
-## 5. Android Call Security UI
-
-The call UI should remain minimal.
-
-Example:
-
-```text
-┌─────────────────────────────┐
-│ 🛡 Protected      37/100    │
-│ ███████░░░░░░░░░             │
-└─────────────────────────────┘
-```
-
-Do not cover the caller's face/name or normal call controls.
-
-Risk changes should be subtle.
-
-Critical state becomes visually obvious:
-
-```text
-🛡 THREAT DETECTED
-96 / 100
-CRITICAL
+/* Risk Level Semantic Status Tokens */
+--color-risk-safe:      #10B981   (Emerald Green - Risk 0 to 29)
+--color-risk-low:       #3B82F6   (Royal Blue - Risk 30 to 59)
+--color-risk-medium:    #F59E0B   (Amber Gold - Risk 60 to 79)
+--color-risk-high:      #F97316   (Vivid Orange - Risk 80 to 89)
+--color-risk-critical:  #EF4444   (Crimson Red - Risk 90 to 100)
 ```
 
 ---
 
-## 6. Post-Call Explanation
+## 2. Android Live Call HUD & User Experience
 
-Use a full-screen animated security report.
+### 2.1 Minimal Floating Call Badge Overlay
+During an active call, the phone's native call UI remains dominant. VaaniRakshak renders a minimal floating security badge at the top-right or top-center:
 
-Hierarchy:
+```
++-------------------------------------------------------------+
+|                                                             |
+|                    [  🛡 Protected | Risk 37/100  ]         |
+|                       [====================      ]          |
+|                                                             |
+|                      INCOMING CELLULAR CALL                 |
+|                            Unknown Caller                   |
+|                            +91 98765 43210                  |
+|                                                             |
+|                     ( Answer )     ( Decline )              |
++-------------------------------------------------------------+
+```
 
-1. Decision
-2. Risk score
-3. Primary reason
-4. Evidence
-5. Recommended action
+#### States & Micro-Animations:
+- **SAFE ($0 - 29$)**: Emerald green badge icon (`🛡 Protected`). Dynamic progress bar fills to current risk percentage.
+- **LOW ($30 - 59$)**: Royal blue badge icon. Smooth animated bar transition.
+- **MEDIUM ($60 - 79$)**: Amber gold badge icon. Slight pulse effect on risk change.
+- **HIGH ($80 - 89$)**: Orange warning badge icon. Subtle border glow animation.
+- **CRITICAL ($90 - 100$)**: Crimson red alert mode. Converts into the full **Emergency Intervention View**.
 
-Example:
+---
 
-```text
-🚨 CALL PROTECTED
+### 2.2 Emergency Intervention Overlay UI
+When risk score reaches $\ge 90$ (e.g. $94/100$), the system triggers the 10-second intervention policy window:
 
-96 / 100
-CRITICAL
-
-AI-generated voice      96%
-Speaker similarity      92%
-Impersonation           HIGH
-Financial request       DETECTED
-Urgency                 DETECTED
-
-Why?
-The voice resembles a trusted contact,
-but synthetic speech indicators were strong
-and the conversation requested money urgently.
-
-Recommended:
-Verify through a trusted channel.
+```
++-------------------------------------------------------------+
+| 🚨 VOICE IMPERSONATION DETECTED                             |
+|                                                             |
+|                        94 / 100                             |
+|                        CRITICAL                             |
+|                                                             |
+|  Auto-Terminating Call in: [ 08s ]                           |
+|                                                             |
+|  Threat Evidence Breakdown:                                 |
+|  - Synthetic Voice Prob:  96%  [CRITICAL]                   |
+|  - Speaker Similarity:    92%  [IMPERSONATION DETECTED]     |
+|  - Financial Request:     DETECTED (₹20,000 UPI)            |
+|  - Social Engineering:    URGENCY DETECTED                  |
+|                                                             |
+|  [ TERMINATE & BLOCK NOW ]     [ IGNORE / CONTINUE CALL ]   |
++-------------------------------------------------------------+
 ```
 
 ---
 
-## 7. Attack Lab UI
+### 2.3 Post-Call Animated Explanation Screen
+Following call termination or high-risk alert, the user is presented with a detailed, accessible security breakdown:
 
-Clearly distinguish it from the real consumer security experience.
-
-Header:
-
-`ATTACK LAB — CONTROLLED DEMONSTRATION`
-
-Banner:
-
-`CONSENTED / SYNTHETIC / RESEARCH MODE`
-
-Sections:
-
-- Reference Voice
-- Language
-- Script
-- Generator
-- Generated Sample
-- Detection Result
-- Export Evidence
-
-Use warning styling but do not make it look malicious or game-like.
+- **Header**: "Call Threat Intercepted" with an animated green/red shield graphic.
+- **Evidence Cards**:
+  - *Voice Authenticity Spectrogram*: Visual representation of synthetic phase artifacts.
+  - *Speaker Biometrics*: Enrolled voice vs. incoming call feature comparison graph.
+  - *Transcript & Risk Trigger Highlighting*: Text display highlighting detected fraud phrases (*"send ₹20,000 urgently"*).
+- **Actions**: "Report to CyberCrime (1930)", "Add to Blocklist", "Export Incident Report (PDF/JSON)".
 
 ---
 
-## 8. Dashboard
+## 3. React Live Security Command Center Dashboard Layout
 
-### Layout
+The Web Command Center is designed for security administrators, technical judges, and security analysts:
 
-Left navigation:
-
-- Overview
-- Live Protection
-- Incidents
-- Attack Lab
-- Dataset Explorer
-- Models
-- Languages
-- Evaluations
-- Settings
-
-Main content:
-
-Large live risk card.
-
-Secondary cards:
-
-- Synthetic probability
-- Speaker similarity
-- Threat level
-- Intent
-- Social engineering
-- latency
-
-Bottom:
-
-Risk timeline + evidence.
-
----
-
-## 9. Risk Timeline
-
-Show:
-
-```text
-0s   10
-2s   21
-4s   39
-6s   61
-8s   78
-10s  94
 ```
-
-Animate the line/bar smoothly.
-
-Do not animate values faster than actual backend events.
-
----
-
-## 10. Data Visualization
-
-Prefer:
-
-- line charts
-- progress bars
-- compact cards
-- evidence chips
-- timeline markers
-
-Avoid:
-
-- excessive pie charts
-- 3D charts
-- meaningless animations
-- neon cyberpunk effects
-
----
-
-## 11. Accessibility
-
-Support:
-
-- large text
-- high contrast
-- screen-reader labels
-- color + text, never color alone
-- touch targets appropriate for Android
-- multilingual text expansion
-
----
-
-## 12. Motion
-
-Motion should explain state.
-
-Use:
-
-- smooth risk transitions
-- subtle pulse for active protection
-- decisive transition for critical state
-- staged post-call explanation
-
-Avoid:
-
-- constant particle effects
-- distracting gradients
-- excessive bounce animations
-
----
-
-## 13. SIH Visual Moment
-
-The judge should be able to look at the phone and immediately understand:
-
-```text
-VOICE IMPERSONATION
-        ↓
-RISK RISING
-        ↓
-CRITICAL
-        ↓
-CALL PROTECTED
++-----------------------------------------------------------------------------------+
+|  🛡 VAANIRAKSHAK COMMAND CENTER               [ LIVE SESSION: sess_89f2a0 ]  [● LIVE] |
++------------------------------------+----------------------------------------------+
+| REAL-TIME RISK RADAR               | VOICE AUTHENTICITY SPECTRUM                 |
+|                                    |                                              |
+|            Critical (94)           |  Human Prob:      [====      ] 4%            |
+|              /\                    |  Synthetic Prob:  [==========] 96%           |
+|             /  \                   |                                              |
+|            /    \                  | SPECTROGRAM WATERMARK ANALYSIS               |
+|  Speaker  /      \  Intent         | [||||||||||||||||||||||||||||||||||||||||||] |
+|   (92%)  /________\  (Money/Urgent)| Synthetic Artifact Pattern Detected at 2.4kHz|
++------------------------------------+----------------------------------------------+
+| LIVE MULTILINGUAL TRANSCRIPT       | THREAT EVIDENCE VECTOR LIST                  |
+|                                    |                                              |
+| [14:02:11] "Hello brother..."      | ● SYNTHETIC_VOICE_SCORE: 0.96 (WavLM)        |
+| [14:02:14] "I need your help       | ● SPEAKER_SIMILARITY:    0.92 (ECAPA-TDNN)   |
+|  urgently. Send ₹20,000 to..." [!] | ● INTENT_DETECTED:       MONEY_TRANSFER       |
+|                                    | ● TACTIC_DETECTED:       URGENCY / PRESSURE   |
++------------------------------------+----------------------------------------------+
+| ATTACK LAB CONTROL PANEL           | INCIDENT AUDIT TRAIL                         |
+| Generator: [ Coqui XTTS v2   v ]   | ID        Time       Risk   Status   Action  |
+| Target:    [ Trusted Contact v ]   | #INC-802  14:02:15   94     CRITICAL Terminated |
+| [ GENERATE & SIMULATE ATTACK ]     | #INC-801  13:45:01   12     SAFE     Passed  |
++------------------------------------+----------------------------------------------+
 ```
-
-The animation should be memorable but credible.

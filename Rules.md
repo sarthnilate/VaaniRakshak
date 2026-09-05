@@ -1,418 +1,74 @@
-# VaaniRakshak — AI/Engineering Rules
+# Governance & Architectural Rules: VAANIRAKSHAK
 
-## 1. Prime Directive
-
-Build a real, testable, privacy-first security product.
-
-Never fake functionality, benchmark results, permissions, Android capabilities, dataset provenance, or model performance.
-
-If a feature cannot be implemented on ordinary Android, document the platform constraint and implement the closest legitimate architecture.
+**Document Status:** Binding Technical & Ethical Directive  
+**Target Group:** All System Modules, Engineers, and Contributors  
 
 ---
 
-## 2. Technology Rules
+## 1. Fundamental Product Principles
 
-### Android
+### Rule 1.1: Privacy-First Non-Recording Core
+- VaaniRakshak is a **real-time threat detection engine**, NOT a call recording application.
+- Raw audio PCM chunks MUST remain strictly in transient volatile memory during model feature extraction and MUST be immediately freed/overwritten.
+- Under NO circumstances shall raw caller or receiver voice audio be persisted to disk, stored in database logs, or uploaded to unencrypted third-party storage.
 
-Use:
-
-- Kotlin
-- Jetpack Compose
-- Android Telecom APIs
-- CallScreeningService
-- RoleManager
-- Contacts APIs
-- Kotlin Coroutines
-- AndroidX
-
-Avoid introducing unnecessary frameworks.
-
-### Backend
-
-Use:
-
-- Python
-- FastAPI
-- Pydantic
-- PyTorch
-- torchaudio
-- librosa
-- NumPy
-- Transformers
-- Datasets
-- faster-whisper
-- Supabase/PostgreSQL
-- Redis
-- Docker
-
-### Frontend
-
-Use:
-
-- React
-- TypeScript
-- Vite
-- Tailwind
-- Recharts
+### Rule 1.2: Strict Consent for Biometric Profiles
+- Enrolling a speaker profile REQUIRES explicit, interactive user consent.
+- Speaker profiles MUST store mathematical embeddings (e.g., 192-dimensional vector floats), NEVER raw audio recordings.
+- Users MUST be provided with a 1-tap option to inspect, update, or permanently delete all enrolled biometric embeddings.
 
 ---
 
-## 3. AI Rules
+## 2. Attack Lab Ethical & Operational Boundaries
 
-No single AI model is the entire security system.
+### Rule 2.1: Non-Covert Research Guarantee
+- System A (Attack Lab) is strictly a controlled research and demonstration framework.
+- Generated synthetic audio MUST incorporate provenance metadata (`is_synthetic: true`, `generator_family`, `consent_hash`, `timestamp`).
+- Attack Lab MUST NEVER be adapted, refactored, or exposed as a covert voice impersonation tool.
 
-Use layered evidence:
-
-```text
-Voice
-+
-Identity
-+
-Conversation
-+
-Context
-+
-Temporal behavior
-=
-Risk
-```
-
-The LLM is never the sole detector.
-
-The LLM must never directly terminate calls.
-
-The policy/decision engine controls security actions.
+### Rule 2.2: Modular Generator Decoupling
+- The defensive engine (System B) MUST NOT rely on proprietary features of any single synthetic voice generator.
+- All generators MUST conform to the `VoiceGenerator` abstract adapter interface.
 
 ---
 
-## 4. Voice Clone Attack Lab Rules
+## 3. Android Platform & Engineering Directives
 
-Attack Lab is strictly controlled.
+### Rule 3.1: Zero Invented APIs
+- Engineers MUST NOT invent non-existent Android APIs or claim that standard third-party apps can freely tap live cellular voice calls programmatically without platform permissions.
+- The app MUST maintain explicit separation between:
+  1. *Tier 1 (Consumer Mode)*: Official `CallScreeningService` + Local simulated test loopback.
+  2. *Tier 2 (Research/Demo Mode)*: WebSocket audio stream injector for hackathon evaluation.
+  3. *Tier 3 (Carrier Mode)*: Carrier/Operator gRPC stream protocol.
 
-Allowed:
-
-- explicit consented reference voices
-- licensed datasets
-- synthetic samples for security research
-- controlled scripts
-- test-phone demonstrations
-
-Forbidden:
-
-- unauthorized voice collection
-- covert cloning
-- impersonating real people without consent
-- operational fraud workflows
-- harvesting voices from calls
-- deceptive deployment
-
-Every generated demo sample should have metadata indicating:
-
-- consent/source
-- generator
-- language
-- generation family
-- timestamp
-- synthetic label
+### Rule 3.2: Non-Intrusive Live HUD Design
+- The live call security indicator MUST remain minimal (`🛡 Protected | Risk 37/100`).
+- It MUST NOT block standard call controls (Answer, Reject, Speaker, Mute) during normal risk levels.
+- Full-screen alerts and 10-second countdown intervention windows activate ONLY when risk escalates to CRITICAL ($\ge 90$).
 
 ---
 
-## 5. Dataset Rules
+## 4. AI & Risk Engine Rules
 
-Every dataset must have:
+### Rule 4.1: Multi-Evidence Independence
+- Risk scores MUST be derived from multiple independent evidence sources (Voice Authenticity, Speaker Verification, Intent Classification, Social Engineering, Temporal Trajectory).
+- Single-feature binary classification is forbidden for safety-critical decisions.
 
-- source
-- license/permission status
-- version
-- language
-- speaker information as legally appropriate
-- label
-- generation family if synthetic
-- preprocessing
-- split
+### Rule 4.2: Deterministic Action Control
+- Call termination, emergency alerts, and intervention triggers MUST be executed by deterministic rule evaluation and temporal GRU state bounds.
+- Generative Large Language Models (LLMs) MAY be used for natural language explanation generation and post-call summaries, but MUST NEVER directly trigger call disconnection or alter safety thresholds.
 
-Never claim an external dataset is ours.
-
-Never copy restricted audio into the repository.
-
-For external data, store manifests/provenance and only retain audio when permitted.
+### Rule 4.3: Decoupled Policy Configuration
+- Operational parameters (e.g., 10-second confirmation window, sensitivity thresholds, high-risk intent weights) MUST be configurable via environment variables and policy configuration schemas.
+- Policies MUST NOT be hard-coded into machine learning model weights or compiled binaries.
 
 ---
 
-## 6. Training Rules
+## 5. Development & Benchmark Standards
 
-Use speaker-disjoint splits.
+### Rule 5.1: Empirical Benchmarking Only
+- Engineers MUST NOT claim arbitrary accuracy, F1, or EER metrics without executing repeatable benchmark scripts against documented test datasets.
+- Test splits MUST be speaker-disjoint and generator-disjoint to prevent data leakage.
 
-Where possible use generator-disjoint evaluation.
-
-Do not allow the same speaker to leak across train/test.
-
-Do not train and test on identical samples.
-
-Include:
-
-- bona-fide speech
-- synthetic speech
-- voice-conversion samples
-- cloned speech
-- codec-degraded speech
-- noise/reverb conditions
-- multilingual speech
-- unseen synthetic conditions
-
----
-
-## 7. Metrics Rules
-
-Never report accuracy alone.
-
-Report appropriate metrics such as:
-
-- precision
-- recall
-- F1
-- ROC-AUC where appropriate
-- PR-AUC where appropriate
-- EER for speaker/anti-spoofing contexts where appropriate
-- confusion matrix
-- latency
-- per-language metrics
-
-Separate validation and held-out test results.
-
----
-
-## 8. Multilingual Rules
-
-Never silently translate every language into English and claim native multilingual intelligence.
-
-Maintain language IDs.
-
-Track performance by language.
-
-Support code-switching such as Hinglish.
-
-Maintain a language coverage matrix.
-
-If a language is supported by the underlying foundation model but not validated by VaaniRakshak, mark it as:
-
-`MODEL-SUPPORTED / NOT-YET-BENCHMARKED`
-
-not simply `FULLY SUPPORTED`.
-
----
-
-## 9. Privacy Rules
-
-Default:
-
-```text
-audio
- ↓
-inference
- ↓
-structured result
- ↓
-discard
-```
-
-Do not create a call-recording library.
-
-Do not retain raw call audio by default.
-
-Do not put sensitive audio into logs.
-
-Encrypt sensitive stored data.
-
-Minimize retention.
-
----
-
-## 10. Android Permission Rules
-
-Explain each permission before requesting it.
-
-Request only permissions required by the active feature.
-
-Do not ask for permissions merely because they might be useful later.
-
-Never claim a permission grants capabilities it does not grant.
-
-Never claim CallScreeningService provides unrestricted call audio.
-
----
-
-## 11. Error Handling
-
-Every backend endpoint must:
-
-- validate input
-- return structured errors
-- log safely
-- avoid leaking secrets
-- handle model timeouts
-- handle Redis failures
-- handle WebSocket disconnects
-
-AI failure must degrade safely.
-
-Example:
-
-```text
-ML unavailable
-     ↓
-do not fabricate a SAFE result
-     ↓
-show protection unavailable / limited mode
-     ↓
-apply conservative policy
-```
-
----
-
-## 12. Security
-
-Never hard-code:
-
-- API keys
-- database passwords
-- model-provider secrets
-- JWT secrets
-
-Use `.env`.
-
-Commit only `.env.example`.
-
-Use authentication and authorization on production endpoints.
-
-Apply rate limits.
-
-Validate uploaded files.
-
-Limit audio size and duration.
-
----
-
-## 13. Code Quality
-
-Prefer:
-
-- small modules
-- typed interfaces
-- dependency injection
-- unit tests
-- integration tests
-- clear naming
-- configuration over hard-coding
-
-Avoid:
-
-- giant files
-- duplicate logic
-- magic constants
-- hidden global state
-- unused dependencies
-- unnecessary abstraction
-
----
-
-## 14. Risk Engine Rules
-
-Risk must be explainable.
-
-Every critical decision should have structured evidence.
-
-Example:
-
-```json
-{
-  "risk_score": 94,
-  "band": "CRITICAL",
-  "evidence": [
-    {"type": "synthetic_voice", "score": 0.96},
-    {"type": "speaker_similarity", "score": 0.92},
-    {"type": "money_request", "score": 0.98},
-    {"type": "urgency", "score": 0.91}
-  ]
-}
-```
-
----
-
-## 15. UI Rules
-
-Security UI must be:
-
-- minimal during calls
-- readable
-- accessible
-- non-blocking unless policy requires intervention
-- understandable in seconds
-
-Use animation to communicate changing risk, not for decoration.
-
-Post-call explanation can be richer.
-
----
-
-## 16. AI Agent Rules
-
-When coding:
-
-1. Inspect the existing repository before changing it.
-2. Read PRD, Architecture, Rules and Phases first.
-3. Read Memory.md after it exists.
-4. Do not rewrite working code without a reason.
-5. Run tests after meaningful changes.
-6. Update documentation after architecture changes.
-7. Update Memory.md after every completed phase.
-8. Never invent files or APIs.
-9. Never fabricate test output.
-10. If blocked, report the exact blocker and implement a clean interface/mock only when appropriate.
-
----
-
-## 17. Demo Rules
-
-The SIH demo must be reproducible.
-
-Maintain:
-
-- demo scripts
-- sample metadata
-- fallback recordings where legally/consensually allowed
-- deterministic configuration
-- offline fallback for non-network-critical visual portions
-- clear distinction between live detection and pre-generated demo data
-
-Never secretly substitute a prerecorded result while claiming it is live inference.
-
----
-
-## 18. Judge Honesty Rule
-
-If asked:
-
-"Can ordinary Android capture cellular call audio?"
-
-Answer honestly.
-
-If asked:
-
-"What did you train on?"
-
-Show actual provenance.
-
-If asked:
-
-"What is your accuracy?"
-
-Show measured results and conditions.
-
-If asked:
-
-"Does this detect all languages perfectly?"
-
-No. Explain validated coverage and multilingual architecture.
-
-Credibility is more important than exaggerated claims.
+### Rule 5.2: Memory.md Tracking
+- After completing any implementation phase, `Memory.md` MUST be updated immediately with exact reproduction commands, modified files, test results, and known limitations.

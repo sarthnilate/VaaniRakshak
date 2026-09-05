@@ -1,499 +1,215 @@
-# VaaniRakshak — Architecture
+# Architecture Specification: VAANIRAKSHAK Engine & Attack Lab
 
-## 1. Architecture Principle
-
-Build two systems around one shared research infrastructure:
-
-```text
-ATTACK LAB
-Consented voice → controlled synthetic attack → test sample
-                                      ↓
-                               VaaniRakshak
-                                      ↓
-                         detection / reasoning / action
-```
-
-The Attack Lab must never be coupled as a malicious operational tool.
+**System Architect:** Principal Security & AI Systems Architect  
+**Version:** 1.0.0-SIH2026  
+**Target Environments:** Android (API 26+) | Python 3.11 FastAPI Backend | React 18 / Vite / Tailwind Dashboard  
 
 ---
 
-## 2. High-Level Architecture
+## 1. System Topology & Data Flow Architecture
 
-```text
-                        ANDROID DEVICE
-                              │
-                       Incoming phone call
-                              │
-                              ▼
-                  Android Telecom / Screening
-                              │
-                    Contact / identity resolver
-                              │
-                    ┌─────────┴─────────┐
-                    │                   │
-                  KNOWN              UNKNOWN
-                    │                   │
-                    └─────────┬─────────┘
-                              ▼
-                     Protection Session
-                              │
-                       Minimal UI state
-                              │
-                    Authorized audio path
-                              │
-                              ▼
-                       FastAPI Gateway
-                              │
-                        WebSocket stream
-                              │
-                         Redis session
-                              │
-             ┌────────────────┼────────────────┐
-             ▼                ▼                ▼
-       Voice detector   Speaker verifier    STT
-             │                │                │
-             └────────────────┼────────────────┘
-                              ▼
-                    Conversation Intelligence
-                              │
-                    Temporal Conversation State
-                              │
-                              ▼
-                         Risk Engine
-                              │
-                              ▼
-                       Decision Engine
-                       /             \
-                 CONTINUE          CRITICAL
-                    │                 │
-                    ▼                 ▼
-              Android update     Protection action
-                                      │
-                                      ▼
-                              Explanation UI
+VAANIRAKSHAK is built as a micro-service, modular event-driven architecture designed to process streaming audio frames in under **300ms latency** to deliver real-time phone call threat assessment.
+
 ```
-
----
-
-## 3. Attack Lab Architecture
-
-```text
-Attack Lab UI
-    │
-    ├── Consent manager
-    ├── Language selector
-    ├── Reference voice manager
-    ├── Script manager
-    └── Generation controller
-              │
-              ▼
-       Voice Generation Adapter
-              │
-       ┌──────┼─────────┐
-       ▼      ▼         ▼
-      TTS  Voice Conv  Clone adapter
-       │      │         │
-       └──────┼─────────┘
-              ▼
-        Synthetic sample
-              │
-        Quality/metadata
-              │
-              ▼
-       Controlled demo stream
-```
-
-The generator must be an adapter interface so the actual model can be swapped.
-
-Example interface:
-
-```python
-class VoiceGenerator:
-    def generate(
-        self,
-        reference_voice,
-        text,
-        language,
-        config,
-    ) -> GeneratedSample:
-        ...
+┌───────────────────────────────────────────────────────────────────────────────────┐
+│                                 ANDROID CLIENT                                    │
+│                                                                                   │
+│  ┌───────────────────────┐   ┌────────────────────────┐   ┌────────────────────┐  │
+│  │ CallScreeningService   │   │ Contacts & User Policy │   │ Consented Profiles │  │
+│  └───────────┬───────────┘   └───────────┬────────────┘   └─────────┬──────────┘  │
+│              │ Intercept Call            │ Query Protection         │ Embedding   │
+│              v                           v                          v             │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐  │
+│  │                     Android Audio Acquisition Handler                       │  │
+│  │   - Tier 1: Consumer Mode (Call Screening + Local Testing)                  │  │
+│  │   - Tier 2: Research/Demo Mode (Mic / WS Loopback Audio Injector)           │  │
+│  │   - Tier 3: Privileged Operator Mode (gRPC Carrier Audio Feed)            │  │
+│  └───────────────────────────────────────┬─────────────────────────────────────┘  │
+└──────────────────────────────────────────┼────────────────────────────────────────┘
+                                           │ WebSocket PCM Stream (16kHz, 16-bit)
+                                           v
+┌───────────────────────────────────────────────────────────────────────────────────┐
+│                         PYTHON FASTAPI REAL-TIME AI ENGINE                        │
+│                                                                                   │
+│    ┌─────────────────────────────────────────────────────────────────────────┐    │
+│    │                       WebSocket Handler & Buffer Manager               │    │
+│    └────────────────────────────────────┬────────────────────────────────────┘    │
+│                                         │ 1-second rolling audio chunks           │
+│                                         v                                         │
+│    ┌─────────────────────────────────────────────────────────────────────────┐    │
+│    │                      PARALLEL EVIDENCE PIPELINE                         │    │
+│    │                                                                         │    │
+│    │  ┌─────────────────────┐ ┌─────────────────────┐ ┌───────────────────┐  │    │
+│    │  │ Voice Authenticity  │ │ SpeakerBiometric    │ │  Streaming STT    │  │    │
+│    │  │ (WavLM / AASIST)    │ │ (ECAPA-TDNN)        │ │  (faster-whisper) │  │    │
+│    │  └──────────┬──────────┘ └──────────┬──────────┘ └─────────┬─────────┘  │    │
+│    │             │ synthetic_prob        │ similarity_score     │ transcript  │    │
+│    │             │                       │                      v             │    │
+│    │             │                       │            ┌────────────────────┐ │    │
+│    │             │                       │            │ Conversation Intel │ │    │
+│    │             │                       │            │ (XLM-RoBERTa NLP)  │ │    │
+│    │             │                       │            └─────────┬──────────┘ │    │
+│    │             │                       │                      │ intent     │    │
+│    │             │                       │                      │ tactics    │    │
+│    └─────────────┼───────────────────────┼──────────────────────┼────────────┘    │
+│                  │                       │                      │                 │
+│                  v                       v                      v                 │
+│    ┌─────────────────────────────────────────────────────────────────────────┐    │
+│    │                         Temporal Risk State Engine                      │    │
+│    │                   - Rolling GRU State Tracker (0 -> 100)                │    │
+│    │                   - Evidence Aggregator & Weighted Trajectory           │    │
+│    └────────────────────────────────────┬────────────────────────────────────┘    │
+│                                         │ Risk Assessment & Evidence JSON         │
+│                                         v                                         │
+│    ┌─────────────────────────────────────────────────────────────────────────┐    │
+│    │                            Decision Engine                              │    │
+│    │           - SAFE / LOW / MEDIUM / HIGH / CRITICAL Band Evaluation       │    │
+│    │           - Trigger 10-second Policy Confirmation / Intervention        │    │
+│    └────────────────────────────────────┬────────────────────────────────────┘    │
+└─────────────────────────────────────────┼─────────────────────────────────────────┘
+                                          │
+                  +-----------------------+-----------------------+
+                  │ Event Broadcast                               │ Metrics / Audit
+                  v                                               v
+┌───────────────────────────────────┐           ┌───────────────────────────────────┐
+│        REDIS SESSION STORE        │           │    SUPABASE / POSTGRESQL DB       │
+│  - Live Call States               │           │  - Incidents & Threat Logs        │
+│  - Temporal Risk Trajectories     │           │  - Consented Speaker Embeddings   │
+│  - Rate Limiting                  │           │  - System Audit Trail             │
+└─────────────────┬─────────────────┘           └───────────────────────────────────┘
+                  │ Real-Time WS Update
+                  v
+┌───────────────────────────────────────────────────────────────────────────────────┐
+│                   REACT + VITE + TAILWIND LIVE COMMAND CENTER                     │
+│  - Real-Time Risk Radar   - Voice Authenticity Spectrum   - Live Transcript       │
+│  - Speaker Anomaly Gauge  - Attack Lab Control Center     - Incident Forensics    │
+└───────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 4. Repository Structure
+## 2. Component Specifications & Design Patterns
 
-```text
-VaaniRakshak/
-├── android/
-│   ├── app/
-│   ├── telecom/
-│   ├── security/
-│   ├── audio/
-│   ├── network/
-│   ├── data/
-│   ├── ui/
-│   └── tests/
-│
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   ├── auth/
-│   │   ├── calls/
-│   │   ├── websocket/
-│   │   ├── risk/
-│   │   ├── incidents/
-│   │   └── settings/
-│   ├── services/
-│   ├── workers/
-│   ├── schemas/
-│   ├── db/
-│   └── tests/
-│
-├── ml/
-│   ├── voice_authenticity/
-│   ├── speaker_verification/
-│   ├── stt/
-│   ├── conversation/
-│   ├── temporal/
-│   ├── risk_engine/
-│   ├── training/
-│   ├── evaluation/
-│   └── common/
-│
-├── attack_lab/
-│   ├── generators/
-│   ├── consent/
-│   ├── scripts/
-│   ├── audio/
-│   ├── evaluation/
-│   └── ui/
-│
-├── datasets/
-│   ├── bona_fide/
-│   ├── synthetic/
-│   ├── demo_attacks/
-│   ├── manifests/
-│   └── provenance/
-│
-├── dashboard/
-│   ├── src/
-│   └── tests/
-│
-├── models/
-│   ├── checkpoints/
-│   └── registry/
-│
-├── experiments/
-│
-├── docs/
-│   ├── DATASET_CARD.md
-│   ├── MODEL_CARD.md
-│   ├── TRAINING.md
-│   ├── LANGUAGE_COVERAGE_MATRIX.md
-│   └── SIH_DEMO.md
-│
-├── docker/
-├── scripts/
-├── .env.example
-├── docker-compose.yml
-├── PRD.md
-├── Architecture.md
-├── Rules.md
-├── Phases.md
-└── Memory.md
+### 2.1 System A: Attack Lab Architecture
+
+#### Modular Generator Architecture (`VoiceGenerator` Adapter Pattern)
 ```
+                ┌──────────────────────────────────────┐
+                │        VoiceGenerator (ABC)          │
+                └──────────────────┬───────────────────┘
+                                   │
+      ┌────────────────────────────┼────────────────────────────┐
+      │                            │                            │
+      v                            v                            v
+┌───────────┐                ┌───────────┐                ┌───────────┐
+│ BarkXTTS  │                │ OpenVoice │                │ MockAudio │
+│ Adapter   │                │ Adapter   │                │ Adapter   │
+└───────────┘                └───────────┘                └───────────┘
+```
+
+#### Audio Degradation Pipeline (`DegradationSimulator`)
+To test defense robustness against real-world cellular network impairments, generated synthetic audio passes through a telecom degradation pipeline:
+1. **Codec Compression**: AMR-WB (12.65 kbps), AMR-NB (7.4 kbps), G.711 $\mu$-law compression simulation.
+2. **Bandwidth Filtering**: Narrowband ($300\text{Hz} - 3.4\text{kHz}$) and Wideband ($50\text{Hz} - 7\text{kHz}$) bandpass filters.
+3. **Acoustic Noise**: Street, babble, and impulse noise injection at specified Signal-to-Noise Ratios (SNR: 5dB to 25dB).
+4. **Packet Loss**: Simulated jitter and 2%–5% frame drop simulating VoIP/cellular transport.
+
+### 2.2 System B: Android Security Application Architecture
+
+#### 3-Tier Audio & Telecom Acquisition Boundaries
+
+| Mode Tier | Description | Suitable Context | Security & Privacy Guarantees |
+|---|---|---|---|
+| **Tier 1: Consumer Mode** | Uses standard `CallScreeningService` to intercept calls, identify unknown numbers, and display floating security HUD overlay using Android system windows. Uses simulated audio loopback for local testing. | Public Play Store release / Consumer devices | Zero platform policy violations; standard Android permission framework. |
+| **Tier 2: Research/Demo Mode** | Captures ambient mic audio or uses internal loopback / WebSocket stream injection from Attack Lab. | Hackathon evaluation, live security testing, hardware test benches | Explicit user research consent modal active; visible persistent foreground notification. |
+| **Tier 3: Carrier/Privileged Mode** | Direct gRPC voice stream integration with telecom IMS/VoLTE core or operator-level tap. | Future enterprise telecom deployment | High throughput, server-side carrier integration; zero app-side audio overhead. |
+
+#### Android Technical Stack
+- **Language**: Kotlin 1.9+
+- **UI Framework**: Jetpack Compose (Material3 + Custom Cyberpunk Security Palette)
+- **Architecture**: Clean Architecture + MVVM + Repository Pattern
+- **Async & Reactive**: Kotlin Coroutines + StateFlow / SharedFlow
+- **Networking**: Ktor Client / Retrofit + WebSockets
+- **Permissions**: `TelecomManager`, `CallScreeningService`, `RoleManager`, `ContactsContract`
 
 ---
 
-## 5. Backend Request Flow
+### 2.3 Backend & AI Engine Architecture
 
-### Call session
+#### Engine Subsystems & Models
 
-```text
-POST /v1/calls/session
-```
+1. **Voice Authenticity Module (Anti-Spoofing)**:
+   - **Primary Model**: Fine-tuned WavLM Large / AASIST spectro-temporal feature extractor.
+   - **Feature Extraction**: LFCC (Linear Frequency Cepstral Coefficients) + Spectro-Temporal Phase Embeddings.
+   - **Output**: `synthetic_probability` ($[0.0, 1.0]$), `human_probability`, `confidence`.
 
-Creates:
+2. **Speaker Verification Module (Biometrics)**:
+   - **Primary Model**: ECAPA-TDNN (Emphasized Channel Attention, Propagation and Aggregation in TDNN).
+   - **Process**: Extracts 192-dimensional speaker embedding from audio chunk; calculates cosine similarity against enrolled user profiles stored in PostgreSQL.
+   - **Output**: `speaker_similarity` ($[0.0, 1.0]$), `enrolled_speaker_id`.
 
-- session_id
-- device_id
-- call metadata
-- policy
-- language state
+3. **Multilingual Speech-to-Text (STT)**:
+   - **Engine**: `faster-whisper` (CTranslate2 implementation of OpenAI Whisper).
+   - **Streaming**: VAD (Voice Activity Detection) powered chunking into 1.5-second text windows.
+   - **Output**: `transcription`, `detected_language`, `language_probability`.
 
-### Live stream
+4. **Conversation Intelligence & Social Engineering NLP**:
+   - **Model**: `xlm-roberta-base` fine-tuned for multilingual intent and psychological manipulation detection + Deterministic Regex Rule Fallbacks.
+   - **Categories**:
+     - *Intents*: `MONEY_TRANSFER`, `OTP_REQUEST`, `PASSWORD_REQUEST`, `PIN_REQUEST`, `REMOTE_ACCESS`, `APK_INSTALLATION`, `BANK_VERIFICATION`.
+     - *Tactics*: `URGENCY`, `FEAR`, `AUTHORITY`, `SECRECY`, `PRESSURE`, `ISOLATION`.
 
-```text
-WS /v1/calls/{session_id}/stream
-```
-
-Messages include:
-
-```json
-{
-  "type": "risk_update",
-  "session_id": "...",
-  "risk_score": 74,
-  "synthetic_probability": 0.82,
-  "speaker_similarity": 0.88,
-  "threats": ["impersonation", "urgency"]
-}
-```
-
-### Decision
-
-```text
-POST /v1/calls/{session_id}/decision
-```
-
-The server returns a policy decision, but Android must enforce only actions that its current platform privileges/support permit.
+5. **Temporal Risk State Engine (GRU Aggregator)**:
+   - Maintains rolling state vector over $N$ time steps:
+     $$S_t = \text{GRU}(S_{t-1}, E_t)$$
+     where $E_t = [\text{synthetic\_prob}, \text{speaker\_similarity}, \text{intent\_score}, \text{tactic\_score}, \text{caller\_context}]$.
+   - Calculates dynamic risk trajectory $R_t \in [0, 100]$.
 
 ---
 
-## 6. ML Pipeline
+## 3. Database & Session Architecture
 
-### Audio
+### 3.1 Redis Session Store
+- Key Pattern `call:session:{session_id}`: Store active call metadata, current risk score, temporal history, and client connections.
+- Key Pattern `call:stream:{session_id}`: Streaming audio chunk buffer.
+- TTL: 30 minutes automatic expiry post-call termination.
 
-```text
-audio chunk
-    ↓
-validation
-    ↓
-preprocessing
-    ↓
-voice authenticity
-    ↓
-speaker embedding
-    ↓
-feature fusion
-```
-
-### Speech
-
-```text
-audio
- ↓
-multilingual STT
- ↓
-language identification
- ↓
-text normalization
- ↓
-multilingual classifiers
-```
-
-### Conversation
-
-```text
-chunk features
-      ↓
-conversation state
-      ↓
-temporal model
-      ↓
-risk fusion
-```
+### 3.2 Supabase / PostgreSQL Schema
+- `users`: User profiles and protection policies.
+- `enrolled_speakers`: Consented trusted contact profiles storing 192-d ECAPA-TDNN embeddings (vector column using `pgvector`).
+- `incidents`: High-risk call records, evidence snapshots, risk trajectories, and decision audit logs (zero raw audio).
+- `attack_lab_provenance`: Provenance registry of generated synthetic audio samples.
 
 ---
 
-## 7. Model Ensemble
+## 4. API & WebSocket Protocol Contract
 
-Initial research candidates:
-
-### Authenticity
-
-- WavLM-based classifier
-- AASIST-style detector
-- RawNet-style detector
-
-### Speaker
-
-- ECAPA-TDNN
-
-### STT
-
-- faster-whisper / Whisper-compatible abstraction
-
-### NLP
-
-- XLM-RoBERTa or equivalent multilingual encoder
-- rule-based high-risk phrase layer
-- optional LLM explanation layer
-
-### Temporal
-
-- GRU or Transformer temporal model
-
-The architecture must allow model replacement without changing the Android client.
-
----
-
-## 8. Risk Fusion
-
-Conceptual:
-
-```text
-R = f(
-  authenticity,
-  speaker_anomaly,
-  impersonation,
-  intent,
-  social_engineering,
-  caller_context,
-  sensitive_action,
-  temporal_change
-)
-```
-
-Do not hard-code arbitrary weights before validation.
-
-Store model and policy versions with every decision.
-
----
-
-## 9. Database
-
-### Supabase/PostgreSQL
-
-Core tables:
-
-```text
-users
-devices
-trusted_contacts
-consents
-speaker_profiles
-call_sessions
-call_events
-risk_events
-incidents
-model_versions
-model_evaluations
-language_profiles
-audit_logs
-```
-
-### Redis
-
-Use for:
-
-- active call state
-- TTL-based sessions
-- live risk state
-- caching
-- rate limits
-- event coordination
-
-### Future Kafka
-
-Use when event throughput becomes large enough to justify durable distributed streaming.
-
-Do not introduce Kafka into the first prototype unless a concrete need appears.
-
----
-
-## 10. Android Architecture
-
-```text
-UI
- │
-SecurityManager
- │
-CallScreeningService
- │
-CallSessionManager
- │
-Network/WebSocket
- │
-Local state
-```
-
-Use Kotlin coroutines and clean separation between:
-
-- Telecom
-- security policy
-- network
-- UI
-- persistence
-
-The Android client should be thin.
-
----
-
-## 11. Android Platform Constraint
-
-Never fake unrestricted cellular call audio capture.
-
-`CallScreeningService` is for call screening and caller/call metadata. Ordinary third-party apps cannot simply capture unrestricted cellular uplink/downlink audio.
-
-Therefore the architecture has:
-
-### Consumer mode
-
-Real Android call screening + supported security signals.
-
-### Controlled demo mode
-
-A permitted audio source/test stream feeds the same backend pipeline so the complete AI detection flow can be demonstrated.
-
-### Future telecom mode
-
-Carrier/network-level or privileged deployment can provide a deeper audio-analysis path under appropriate authorization.
-
-This distinction must appear in documentation and judge answers.
-
----
-
-## 12. Deployment
-
-Prototype:
-
-```text
-Android
-   ↓
-FastAPI
-   ↓
-Redis
-   ↓
-ML workers
-   ↓
-Supabase
-```
-
-Use Docker Compose locally.
-
-Production evolution:
-
-```text
-Load Balancer
-      ↓
-API replicas
-      ↓
-Redis Cluster
-      ↓
-Event streaming
-      ↓
-GPU ML workers
-      ↓
-PostgreSQL/Supabase
-```
-
----
-
-## 13. Observability
-
-Track:
-
-- API latency
-- WebSocket latency
-- inference latency
-- model version
-- decision latency
-- dropped chunks
-- errors
-- GPU/CPU utilization
-- false positives/false negatives
-- per-language performance
-
-Never log raw sensitive audio by default.
+### WebSocket Endpoint: `/ws/call/{session_id}`
+- **Client Message (Audio Frame)**:
+  ```json
+  {
+    "type": "audio_chunk",
+    "sequence": 14,
+    "timestamp_ms": 1400,
+    "pcm_b64": "..."
+  }
+  ```
+- **Server Message (Risk Update)**:
+  ```json
+  {
+    "type": "risk_update",
+    "session_id": "sess_89f2a0",
+    "sequence": 14,
+    "risk_score": 94,
+    "band": "CRITICAL",
+    "evidence": {
+      "synthetic_probability": 0.96,
+      "speaker_similarity": 0.92,
+      "detected_intent": "MONEY_TRANSFER",
+      "detected_tactics": ["URGENCY", "PRESSURE"],
+      "transcription_snippet": "I need your help urgently. Send 20,000 rupees..."
+    },
+    "action": "INTERVENE_RECOMMENDED",
+    "policy_window_sec": 10
+  }
+  ```

@@ -9,11 +9,17 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
+backend/venv/
+*.db
+*.sqlite3
 
 # Node
 node_modules/
+dashboard/node_modules/
 dist/
+dashboard/dist/
 .vite/
+dashboard/.vite/
 
 # Android
 android/**/.gradle/
@@ -36,5 +42,6 @@ datasets/demo_attacks/*
 !datasets/synthetic/.gitkeep
 !datasets/demo_attacks/.gitkeep
 
-# OS
+# OS & Workspace
 .DS_Store
+VaaniRakshak/
