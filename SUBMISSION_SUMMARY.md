@@ -26,6 +26,7 @@
 | **Phase 14** | **Carrier CDR Geolocation & Bridge** | Telecom CGI tower resolution, fraud hotspot mapping, and live WebSocket engine bridge. | ✅ Complete |
 | **Phase 15** | **Live Policy Panel & Section 65B** | Real-time policy slider control panel and Section 65B Evidence Act certificate bundle generator. | ✅ Complete |
 | **Phase 16** | **Telemetry, Health & Pitch Deck** | System metrics endpoint (`<300ms SLA`), deep diagnostic health scanner, `SystemHealthPanel`, unit tests, and pitch deck. | ✅ Complete |
+| **Phase 17** | **Enterprise SIEM & Audit Logs** | Common Event Format (CEF) SIEM streaming, security audit log buffer, CSV batch dataset exporter, and `AdminPanel`. | ✅ Complete |
 
 ---
 
