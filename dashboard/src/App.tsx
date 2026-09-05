@@ -18,6 +18,7 @@ import { JudgeSandboxModal } from './components/JudgeSandboxModal';
 import { CarrierCDRPanel } from './components/CarrierCDRPanel';
 import { PolicyControlPanel } from './components/PolicyControlPanel';
 import { SystemHealthPanel } from './components/SystemHealthPanel';
+import { ModelBenchmarkPanel } from './components/ModelBenchmarkPanel';
 import { AdminPanel } from './components/AdminPanel';
 
 const SCENARIO_DESCRIPTIONS: Record<number, { title: string; icon: string; color: string }> = {
@@ -209,6 +210,9 @@ function App() {
 
             {/* System Performance & Diagnostic Panel */}
             <SystemHealthPanel />
+
+            {/* AI Model Degradation Resiliency Panel */}
+            <ModelBenchmarkPanel />
 
             {/* Enterprise Security Admin & SIEM Panel */}
             <AdminPanel />
