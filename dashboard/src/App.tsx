@@ -18,6 +18,7 @@ import { JudgeSandboxModal } from './components/JudgeSandboxModal';
 import { CarrierCDRPanel } from './components/CarrierCDRPanel';
 import { PolicyControlPanel } from './components/PolicyControlPanel';
 import { SystemHealthPanel } from './components/SystemHealthPanel';
+import { AdminPanel } from './components/AdminPanel';
 
 const SCENARIO_DESCRIPTIONS: Record<number, { title: string; icon: string; color: string }> = {
   1: { title: 'Banking Fraud (Hindi)', icon: '🏦', color: '#ef4444' },
@@ -208,6 +209,9 @@ function App() {
 
             {/* System Performance & Diagnostic Panel */}
             <SystemHealthPanel />
+
+            {/* Enterprise Security Admin & SIEM Panel */}
+            <AdminPanel />
 
             {/* Quick Stats Card */}
             <div className="card" style={{ padding: '16px' }}>

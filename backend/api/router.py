@@ -12,6 +12,7 @@ from backend.api.endpoints_policy import router as policy_router
 from backend.api.endpoints_sandbox import router as sandbox_router
 from backend.api.endpoints_carrier_cdr import router as carrier_cdr_router
 from backend.api.endpoints_telemetry import router as telemetry_router
+from backend.api.endpoints_admin import router as admin_router
 
 api_router = APIRouter(prefix=settings.API_V1_PREFIX)
 
@@ -43,4 +44,6 @@ api_router.include_router(policy_router)
 api_router.include_router(sandbox_router)
 api_router.include_router(carrier_cdr_router)
 api_router.include_router(telemetry_router)
+api_router.include_router(admin_router)
+
 
