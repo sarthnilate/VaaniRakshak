@@ -16,6 +16,7 @@ import { ForensicsTable } from './components/ForensicsTable';
 import { EmergencyOverlay } from './components/EmergencyOverlay';
 import { JudgeSandboxModal } from './components/JudgeSandboxModal';
 import { CarrierCDRPanel } from './components/CarrierCDRPanel';
+import { PolicyControlPanel } from './components/PolicyControlPanel';
 
 const SCENARIO_DESCRIPTIONS: Record<number, { title: string; icon: string; color: string }> = {
   1: { title: 'Banking Fraud (Hindi)', icon: '🏦', color: '#ef4444' },
@@ -200,6 +201,9 @@ function App() {
               sessionId={sessionState.sessionId}
               isActive={isConnected || sessionState.status === 'ENDED'}
             />
+
+            {/* Live Policy Control Panel */}
+            <PolicyControlPanel />
 
             {/* Quick Stats Card */}
             <div className="card" style={{ padding: '16px' }}>

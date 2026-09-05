@@ -3,6 +3,7 @@
 // ============================================================
 import React, { useState } from 'react';
 import type { LiveFrame } from '../hooks/useVaaniWebSocket';
+import { EvidenceCertificateModal } from './EvidenceCertificateModal';
 
 interface ForensicsTableProps {
   frames: LiveFrame[];
@@ -23,6 +24,7 @@ export const ForensicsTable: React.FC<ForensicsTableProps> = ({
 }) => {
   const [expanded, setExpanded] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [showCertModal, setShowCertModal] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const alertFrames = frames.filter(f => f.riskScore >= 60);
@@ -284,16 +286,23 @@ export const ForensicsTable: React.FC<ForensicsTableProps> = ({
               <button
                 onClick={handleExportMarkdown}
                 className="btn btn--ghost"
-                style={{ flex: 1, justifyContent: 'center', fontSize: '12px', padding: '10px' }}
+                style={{ flex: 1, justifyContent: 'center', fontSize: '11px', padding: '8px 10px' }}
               >
-                📥 Download Markdown (.md)
+                📥 Markdown (.md)
               </button>
               <button
                 onClick={handleExportJson}
                 className="btn btn--ghost"
-                style={{ flex: 1, justifyContent: 'center', fontSize: '12px', padding: '10px' }}
+                style={{ flex: 1, justifyContent: 'center', fontSize: '11px', padding: '8px 10px' }}
               >
-                📥 Download JSON-LD (.json)
+                📥 JSON-LD (.json)
+              </button>
+              <button
+                onClick={() => setShowCertModal(true)}
+                className="btn btn--ghost"
+                style={{ flex: 1.2, justifyContent: 'center', fontSize: '11px', padding: '8px 10px', color: '#10b981', borderColor: 'rgba(16,185,129,0.4)', background: 'rgba(16,185,129,0.08)' }}
+              >
+                📜 65B Cert (.json)
               </button>
             </div>
 
@@ -312,6 +321,13 @@ export const ForensicsTable: React.FC<ForensicsTableProps> = ({
           </div>
         </div>
       )}
+
+      <EvidenceCertificateModal
+        isOpen={showCertModal}
+        sessionId={sessionId}
+        callerNumber={callerNumber}
+        onClose={() => setShowCertModal(false)}
+      />
     </div>
   );
 };
