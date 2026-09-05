@@ -1,0 +1,78 @@
+# VaaniRakshak — Phase 0 local development stack.
+#
+# Scope: gateway + dashboard + their direct infra (Redis, Postgres), each
+# with a health check, per Phases.md Phase 0 acceptance criteria. ML
+# workers, WebSocket streaming workloads and Android are out of scope here
+# (see Architecture.md section 12 for the fuller deployment picture).
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-vaanirakshak}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vaanirakshak}
+      POSTGRES_DB: ${POSTGRES_DB:-vaanirakshak}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-vaanirakshak}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-vaanirakshak}:${POSTGRES_PASSWORD:-vaanirakshak}@postgres:5432/${POSTGRES_DB:-vaanirakshak}
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/v1/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: ./dashboard
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5173"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

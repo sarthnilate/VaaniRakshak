@@ -1,0 +1,10 @@
+# Heavy ML dependencies are intentionally kept separate from the core
+# API requirements so the Phase 0 gateway can boot without a GPU image.
+# These are introduced starting Phase 3 (Voice Authenticity Model).
+# torch
+# torchaudio
+# librosa
+# numpy
+# transformers
+# datasets
+# faster-whisper

@@ -1,0 +1,40 @@
+# Secrets
+.env
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Android
+android/**/.gradle/
+android/**/build/
+android/local.properties
+*.iml
+
+# Models / large artifacts
+models/checkpoints/*
+!models/checkpoints/.gitkeep
+*.ckpt
+*.pt
+*.onnx
+
+# Datasets (never commit raw restricted audio — Rules.md section 5)
+datasets/bona_fide/*
+datasets/synthetic/*
+datasets/demo_attacks/*
+!datasets/bona_fide/.gitkeep
+!datasets/synthetic/.gitkeep
+!datasets/demo_attacks/.gitkeep
+
+# OS
+.DS_Store
