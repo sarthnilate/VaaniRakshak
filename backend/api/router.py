@@ -14,6 +14,7 @@ from backend.api.endpoints_carrier_cdr import router as carrier_cdr_router
 from backend.api.endpoints_telemetry import router as telemetry_router
 from backend.api.endpoints_admin import router as admin_router
 from backend.api.endpoints_benchmarks import router as benchmarks_router
+from backend.api.endpoints_edge import router as edge_router
 
 api_router = APIRouter(prefix=settings.API_V1_PREFIX)
 
@@ -47,6 +48,8 @@ api_router.include_router(carrier_cdr_router)
 api_router.include_router(telemetry_router)
 api_router.include_router(admin_router)
 api_router.include_router(benchmarks_router)
+api_router.include_router(edge_router)
+
 
 
 

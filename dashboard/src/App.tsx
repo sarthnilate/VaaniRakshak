@@ -19,6 +19,7 @@ import { CarrierCDRPanel } from './components/CarrierCDRPanel';
 import { PolicyControlPanel } from './components/PolicyControlPanel';
 import { SystemHealthPanel } from './components/SystemHealthPanel';
 import { ModelBenchmarkPanel } from './components/ModelBenchmarkPanel';
+import { EdgeModePanel } from './components/EdgeModePanel';
 import { AdminPanel } from './components/AdminPanel';
 
 const SCENARIO_DESCRIPTIONS: Record<number, { title: string; icon: string; color: string }> = {
@@ -213,6 +214,9 @@ function App() {
 
             {/* AI Model Degradation Resiliency Panel */}
             <ModelBenchmarkPanel />
+
+            {/* Air-Gapped On-Device Edge Panel */}
+            <EdgeModePanel />
 
             {/* Enterprise Security Admin & SIEM Panel */}
             <AdminPanel />
