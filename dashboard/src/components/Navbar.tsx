@@ -10,10 +10,13 @@ interface NavbarProps {
   onOpenSandbox?: () => void;
   engineMode?: 'live' | 'mock';
   onToggleEngineMode?: () => void;
+  activeTab: 'live' | 'attack' | 'forensics';
+  onTabChange: (tab: 'live' | 'attack' | 'forensics') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   isConnected, riskScore, status, onOpenSandbox, engineMode = 'mock', onToggleEngineMode,
+  activeTab, onTabChange,
 }) => {
   const isAlert = riskScore >= 80;
   const isCritical = riskScore >= 90;
@@ -52,6 +55,42 @@ export const Navbar: React.FC<NavbarProps> = ({
             Live Security Command Center
           </div>
         </div>
+      </div>
+
+      {/* Main View Tabs (Clear separation of 3 primary modes) */}
+      <div style={{
+        display: 'flex', gap: '6px', background: 'rgba(0,0,0,0.4)',
+        padding: '4px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.06)'
+      }}>
+        {[
+          { id: 'live', label: '🛡️ Real-Time Call Protection', badge: isConnected ? 'LIVE' : null },
+          { id: 'attack', label: '🧪 Attack Lab & Benchmarks' },
+          { id: 'forensics', label: '📜 Forensics & Legal Exporter' },
+        ].map(({ id, label, badge }) => {
+          const isActive = activeTab === id;
+          return (
+            <button
+              key={id}
+              onClick={() => onTabChange(id as any)}
+              style={{
+                padding: '6px 14px', borderRadius: '7px', fontSize: '12px', fontWeight: '700',
+                border: isActive ? '1px solid var(--cyan)' : '1px solid transparent',
+                background: isActive ? 'rgba(6,182,212,0.15)' : 'transparent',
+                color: isActive ? 'var(--cyan)' : 'var(--text-secondary)',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <span>{label}</span>
+              {badge && (
+                <span style={{
+                  fontSize: '8px', padding: '1px 5px', borderRadius: '4px',
+                  background: '#10b981', color: '#000', fontWeight: '800'
+                }}>{badge}</span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Center Status & Sandbox Trigger */}
