@@ -27,6 +27,7 @@
 | **Phase 15** | **Live Policy Panel & Section 65B** | Real-time policy slider control panel and Section 65B Evidence Act certificate bundle generator. | ✅ Complete |
 | **Phase 16** | **Telemetry, Health & Pitch Deck** | System metrics endpoint (`<300ms SLA`), deep diagnostic health scanner, `SystemHealthPanel`, unit tests, and pitch deck. | ✅ Complete |
 | **Phase 17** | **Enterprise SIEM & Audit Logs** | Common Event Format (CEF) SIEM streaming, security audit log buffer, CSV batch dataset exporter, and `AdminPanel`. | ✅ Complete |
+| **Phase 18** | **Model Benchmark & Resiliency** | On-demand degradation profiler evaluating PSTN 8kHz landline, G.711 compression, 10dB noise, and packet loss conditions. | ✅ Complete |
 
 ---
 
