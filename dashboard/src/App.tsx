@@ -21,6 +21,7 @@ import { SystemHealthPanel } from './components/SystemHealthPanel';
 import { ModelBenchmarkPanel } from './components/ModelBenchmarkPanel';
 import { EdgeModePanel } from './components/EdgeModePanel';
 import { AdminPanel } from './components/AdminPanel';
+import { LiveSpectrogramCanvas } from './components/LiveSpectrogramCanvas';
 
 const SCENARIO_DESCRIPTIONS: Record<number, { title: string; icon: string; color: string }> = {
   1: { title: 'Banking Fraud (Hindi)', icon: '🏦', color: '#ef4444' },
@@ -174,6 +175,9 @@ function App() {
 
             {/* Voice Authenticity Panel */}
             <VoiceAuthenticityPanel frame={latestFrame} />
+
+            {/* Live Audio Spectrogram Visualizer */}
+            <LiveSpectrogramCanvas isActive={isConnected} />
 
             {/* Transcript Stream */}
             <div style={{ flex: 1, minHeight: '300px' }}>
