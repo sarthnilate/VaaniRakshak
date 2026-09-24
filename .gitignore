@@ -45,3 +45,10 @@ datasets/demo_attacks/*
 # OS & Workspace
 .DS_Store
 VaaniRakshak/
+
+# Attack Lab (Local Research Tool — Excluded from Remote Repository)
+attack_lab/
+backend/attack_lab/
+backend/api/endpoints_attack_lab.py
+backend/tests/test_attack_lab_*.py
+

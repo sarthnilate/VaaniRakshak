@@ -3,7 +3,11 @@ from backend.config import settings
 from backend.api.endpoints_session import router as session_router
 from backend.api.endpoints_incidents import router as incident_router
 from backend.api.endpoints_speakers import router as speaker_router
-from backend.api.endpoints_attack_lab import router as attack_lab_router
+try:
+    from backend.api.endpoints_attack_lab import router as attack_lab_router
+except ImportError:
+    attack_lab_router = None
+
 from backend.api.endpoints_forensics import (
     router as forensics_router,
     carrier_router,
@@ -40,7 +44,8 @@ async def health_check():
 api_router.include_router(session_router)
 api_router.include_router(incident_router)
 api_router.include_router(speaker_router)
-api_router.include_router(attack_lab_router)
+if attack_lab_router:
+    api_router.include_router(attack_lab_router)
 api_router.include_router(forensics_router)
 api_router.include_router(carrier_router)
 api_router.include_router(policy_router)
