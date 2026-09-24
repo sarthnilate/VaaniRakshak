@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1300" width="100%" height="100%" style="background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="hdrGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#312e81" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="prepGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#172554" />
+    </linearGradient>
+    <linearGradient id="boxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#818cf8" />
+    </marker>
+    <marker id="arrCyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+    <marker id="arrPink" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e" />
+    </marker>
+  </defs>
+
+  <!-- HEADER -->
+  <rect x="30" y="25" width="1140" height="70" rx="12" fill="url(#hdrGrad)" stroke="#4338ca" stroke-width="2" />
+  <text x="600" y="58" text-anchor="middle" fill="#f8fafc" font-size="24" font-weight="bold">VAANIRAKSHAK — AI / ML MULTI-EVIDENCE PIPELINE SPECIFICATION</text>
+  <text x="600" y="82" text-anchor="middle" fill="#c7d2fe" font-size="13">Detailed Feature Extraction, Parallel Model Inference, and Multilingual Fraud Detection Workflow</text>
+
+  <!-- STAGE 1: INPUT & PREPROCESSING -->
+  <g transform="translate(40, 120)">
+    <rect x="0" y="0" width="1120" height="140" rx="12" fill="url(#prepGrad)" stroke="#3b82f6" stroke-width="2" />
+    <text x="20" y="28" fill="#60a5fa" font-size="14" font-weight="bold">STAGE 1 — SIGNAL ACQUISITION &amp; SPECTRO-TEMPORAL PREPROCESSING</text>
+
+    <g transform="translate(20, 42)">
+      <rect x="0" y="0" width="240" height="75" rx="8" fill="#0f172a" stroke="#1d4ed8" />
+      <text x="120" y="25" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="bold">1. Base64 PCM Stream</text>
+      <text x="120" y="45" text-anchor="middle" fill="#bfdbfe" font-size="11">16kHz 16-bit Mono PCM</text>
+      <text x="120" y="60" text-anchor="middle" fill="#60a5fa" font-size="10">2s Chunks / 1s Window</text>
+
+      <rect x="270" y="0" width="240" height="75" rx="8" fill="#0f172a" stroke="#1d4ed8" />
+      <text x="390" y="25" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="bold">2. Signal Conditioning</text>
+      <text x="390" y="45" text-anchor="middle" fill="#bfdbfe" font-size="11">Energy VAD (Threshold: 0.01)</text>
+      <text x="390" y="60" text-anchor="middle" fill="#60a5fa" font-size="10">Peak Amplitude Normalization</text>
+
+      <rect x="540" y="0" width="520" height="75" rx="8" fill="#0f172a" stroke="#1d4ed8" />
+      <text x="800" y="25" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="bold">3. Spectrogram &amp; Acoustic Feature Extraction</text>
+      <text x="800" y="45" text-anchor="middle" fill="#bfdbfe" font-size="11">• RMS Energy  • Zero-Crossing Rate (ZCR)  • FFT Spectral Centroid</text>
+      <text x="800" y="60" text-anchor="middle" fill="#60a5fa" font-size="10">• Spectral Flatness (Vocoder Artifacts)  • Phase Irregularity Std Dev</text>
+    </g>
+  </g>
+
+  <!-- ARROW STAGE 1 -> STAGE 2 -->
+  <path d="M 600 260 L 600 295" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrCyan)" fill="none" />
+
+
+  <!-- STAGE 2: PARALLEL MODEL INFERENCE -->
+  <g transform="translate(40, 300)">
+    <rect x="0" y="0" width="1120" height="520" rx="12" fill="#0f172a" stroke="#818cf8" stroke-width="2" />
+    <text x="20" y="30" fill="#a5b4fc" font-size="14" font-weight="bold">STAGE 2 — PARALLEL MULTI-EVIDENCE AI/ML MODELS</text>
+
+    <!-- Branch A: Voice Authenticity -->
+    <g transform="translate(20, 50)">
+      <rect x="0" y="0" width="530" height="210" rx="10" fill="url(#boxGrad)" stroke="#6366f1" stroke-width="1.5" />
+      <rect x="10" y="10" width="510" height="26" rx="5" fill="#312e81" />
+      <text x="265" y="27" text-anchor="middle" fill="#c7d2fe" font-size="12" font-weight="bold">MODEL A: VOICE AUTHENTICITY ENGINE (Anti-Spoofing)</text>
+
+      <text x="20" y="58" fill="#94a3b8" font-size="11" font-weight="bold">INPUT:</text>
+      <text x="80" y="58" fill="#e2e8f0" font-size="11">Preprocessed 16kHz audio waveform + FFT phase features</text>
+
+      <text x="20" y="80" fill="#94a3b8" font-size="11" font-weight="bold">MODEL:</text>
+      <text x="80" y="80" fill="#818cf8" font-size="11" font-weight="bold">WavLM / AASIST Spectro-Temporal Extractor (WavLM-AASIST-v1)</text>
+
+      <text x="20" y="102" fill="#94a3b8" font-size="11" font-weight="bold">LOGIC:</text>
+      <text x="80" y="102" fill="#cbd5e1" font-size="11">Detects neural vocoder phase hyper-regularity (HiFi-GAN, WaveGLOW)</text>
+
+      <rect x="15" y="118" width="500" height="75" rx="6" fill="#1e1b4b" stroke="#4338ca" />
+      <text x="265" y="136" text-anchor="middle" fill="#818cf8" font-size="11" font-weight="bold">OUTPUT STRUCTURE</text>
+      <text x="265" y="156" text-anchor="middle" fill="#f43f5e" font-size="11">synthetic_probability: 0.05 – 0.98  |  human_probability: 0.02 – 0.95</text>
+      <text x="265" y="174" text-anchor="middle" fill="#cbd5e1" font-size="10">artifact_score: 0.00 – 1.00  |  confidence: 0.92  |  latency: &lt; 35ms</text>
+    </g>
+
+    <!-- Branch B: Speaker Verification -->
+    <g transform="translate(570, 50)">
+      <rect x="0" y="0" width="530" height="210" rx="10" fill="url(#boxGrad)" stroke="#6366f1" stroke-width="1.5" />
+      <rect x="10" y="10" width="510" height="26" rx="5" fill="#312e81" />
+      <text x="265" y="27" text-anchor="middle" fill="#c7d2fe" font-size="12" font-weight="bold">MODEL B: SPEAKER VERIFICATION ENGINE (Biometrics)</text>
+
+      <text x="20" y="58" fill="#94a3b8" font-size="11" font-weight="bold">INPUT:</text>
+      <text x="80" y="58" fill="#e2e8f0" font-size="11">Audio chunk + Consented user profile embeddings (PostgreSQL / pgvector)</text>
+
+      <text x="20" y="80" fill="#94a3b8" font-size="11" font-weight="bold">MODEL:</text>
+      <text x="80" y="80" fill="#818cf8" font-size="11" font-weight="bold">ECAPA-TDNN 192-dimensional Speaker Encoder</text>
+
+      <text x="20" y="102" fill="#94a3b8" font-size="11" font-weight="bold">LOGIC:</text>
+      <text x="80" y="102" fill="#cbd5e1" font-size="11">Computes normalized Cosine Similarity against enrolled trusted profiles</text>
+
+      <rect x="15" y="118" width="500" height="75" rx="6" fill="#1e1b4b" stroke="#4338ca" />
+      <text x="265" y="136" text-anchor="middle" fill="#818cf8" font-size="11" font-weight="bold">OUTPUT STRUCTURE</text>
+      <text x="265" y="156" text-anchor="middle" fill="#fbbf24" font-size="11">speaker_similarity: 0.00 – 1.00  |  is_enrolled_match: true/false (thresh: 0.75)</text>
+      <text x="265" y="174" text-anchor="middle" fill="#cbd5e1" font-size="10">impersonation_flag: (high sim + high synth)  |  latency: &lt; 20ms</text>
+    </g>
+
+    <!-- Branch C: Streaming STT -->
+    <g transform="translate(20, 280)">
+      <rect x="0" y="0" width="530" height="220" rx="10" fill="url(#boxGrad)" stroke="#6366f1" stroke-width="1.5" />
+      <rect x="10" y="10" width="510" height="26" rx="5" fill="#312e81" />
+      <text x="265" y="27" text-anchor="middle" fill="#c7d2fe" font-size="12" font-weight="bold">MODEL C: STREAMING MULTILINGUAL STT (ASR)</text>
+
+      <text x="20" y="58" fill="#94a3b8" font-size="11" font-weight="bold">INPUT:</text>
+      <text x="80" y="58" fill="#e2e8f0" font-size="11">VAD-segmented 2s PCM audio frame</text>
+
+      <text x="20" y="80" fill="#94a3b8" font-size="11" font-weight="bold">MODEL:</text>
+      <text x="80" y="80" fill="#818cf8" font-size="11" font-weight="bold">faster-whisper Multilingual CTranslate2 Architecture</text>
+
+      <text x="20" y="102" fill="#94a3b8" font-size="11" font-weight="bold">LANGUAGES:</text>
+      <text x="90" y="102" fill="#38bdf8" font-size="11">Hindi, Marathi, Tamil, Telugu, Bengali, Gujarati, Punjabi, English</text>
+
+      <rect x="15" y="122" width="500" height="80" rx="6" fill="#1e1b4b" stroke="#4338ca" />
+      <text x="265" y="140" text-anchor="middle" fill="#818cf8" font-size="11" font-weight="bold">OUTPUT STRUCTURE</text>
+      <text x="265" y="160" text-anchor="middle" fill="#38bdf8" font-size="11">transcription: "आपण लगेच यूपीआय द्वारे ५०,००० रुपये भरा..."</text>
+      <text x="265" y="180" text-anchor="middle" fill="#cbd5e1" font-size="10">detected_language: "mr"  |  language_confidence: 0.96  |  latency: &lt; 90ms</text>
+    </g>
+
+    <!-- Branch D: Conversation Intelligence -->
+    <g transform="translate(570, 280)">
+      <rect x="0" y="0" width="530" height="220" rx="10" fill="url(#boxGrad)" stroke="#6366f1" stroke-width="1.5" />
+      <rect x="10" y="10" width="510" height="26" rx="5" fill="#312e81" />
+      <text x="265" y="27" text-anchor="middle" fill="#c7d2fe" font-size="12" font-weight="bold">MODEL D: CONVERSATION INTEL &amp; SOCIAL ENGINEERING NLP</text>
+
+      <text x="20" y="58" fill="#94a3b8" font-size="11" font-weight="bold">INPUT:</text>
+      <text x="80" y="58" fill="#e2e8f0" font-size="11">Transcript stream + Caller Context (Contact ID, Unknown Flag)</text>
+
+      <text x="20" y="80" fill="#94a3b8" font-size="11" font-weight="bold">MODEL:</text>
+      <text x="80" y="80" fill="#818cf8" font-size="11" font-weight="bold">XLM-RoBERTa + Multilingual Indic Pattern Engine (9 Languages)</text>
+
+      <text x="20" y="102" fill="#94a3b8" font-size="11" font-weight="bold">CATEGORIES:</text>
+      <text x="90" y="102" fill="#f43f5e" font-size="11">OTP, MONEY_TRANSFER, BANK_VERIFICATION, URGENCY, FEAR, AUTHORITY</text>
+
+      <rect x="15" y="122" width="500" height="80" rx="6" fill="#1e1b4b" stroke="#4338ca" />
+      <text x="265" y="140" text-anchor="middle" fill="#818cf8" font-size="11" font-weight="bold">OUTPUT STRUCTURE</text>
+      <text x="265" y="160" text-anchor="middle" fill="#f43f5e" font-size="11">intent: MONEY_TRANSFER  |  tactics: ["URGENCY", "AUTHORITY"]</text>
+      <text x="265" y="180" text-anchor="middle" fill="#cbd5e1" font-size="10">sensitive_request: true  |  fraud_confidence: 0.95  |  latency: &lt; 25ms</text>
+    </g>
+  </g>
+
+  <!-- ARROW STAGE 2 -> STAGE 3 -->
+  <path d="M 600 820 L 600 855" stroke="#818cf8" stroke-width="2" marker-end="url(#arr)" fill="none" />
+
+
+  <!-- STAGE 3: TEMPORAL INTELLIGENCE & FUSION -->
+  <g transform="translate(40, 860)">
+    <rect x="0" y="0" width="1120" height="240" rx="12" fill="#3b0764" stroke="#c084fc" stroke-width="2" />
+    <text x="20" y="28" fill="#f3e8ff" font-size="14" font-weight="bold">STAGE 3 — GRU TEMPORAL RECURRENCE &amp; MULTI-EVIDENCE FUSION</text>
+
+    <g transform="translate(20, 42)">
+      <rect x="0" y="0" width="520" height="175" rx="8" fill="#1e1b4b" stroke="#7e22ce" />
+      <text x="260" y="25" text-anchor="middle" fill="#e9d5ff" font-size="12" font-weight="bold">Gated Recurrent Unit (GRU) Hidden State Update</text>
+      <text x="20" y="52" fill="#d8b4fe" font-size="11">• Input Vector x_t: [synth_prob, speaker_sim, intent_score, tactics_score, context]</text>
+      <text x="20" y="72" fill="#d8b4fe" font-size="11">• Recurrence: h_t = (α · InstantaneousScore) + ((1 - α) · h_{t-1})</text>
+      <text x="20" y="92" fill="#d8b4fe" font-size="11">• Prevents single-frame false alarms (monotonic accumulation under scam)</text>
+      <text x="20" y="112" fill="#e9d5ff" font-size="11" font-weight="bold">• Trajectory Example: t1: 22 → t2: 58 → t3: 84 → t4: 94 (CRITICAL)</text>
+      <text x="20" y="132" fill="#a7f3d0" font-size="10">• Benign decay: Risk decays gradually when non-threatening speech resumes</text>
+    </g>
+
+    <g transform="translate(560, 42)">
+      <rect x="0" y="0" width="540" height="175" rx="8" fill="#4c0519" stroke="#be123c" />
+      <text x="270" y="25" text-anchor="middle" fill="#ffe4e6" font-size="12" font-weight="bold">Multi-Evidence Fusion &amp; Policy Band Mapping</text>
+      <text x="20" y="52" fill="#fecdd3" font-size="11">• Instantaneous Score Weighting:</text>
+      <text x="35" y="70" fill="#fda4af" font-size="11">Score = (synth_prob × 40) + (intent × 30) + (tactics × 15) + (impersonation × 30)</text>
+      <text x="20" y="92" fill="#ffe4e6" font-size="11" font-weight="bold">• Trusted Contact Exemption Rule:</text>
+      <text x="35" y="110" fill="#fecdd3" font-size="11">If enrolled match = true AND synth_prob &lt; 0.30 → Score capped at 25 (SAFE)</text>
+      <text x="20" y="132" fill="#fda4af" font-size="11">• Band Evaluation: SAFE (&lt;30) | LOW/MED (30-79) | HIGH (80-89) | CRITICAL (90+)</text>
+    </g>
+  </g>
+
+  <!-- ARROW STAGE 3 -> STAGE 4 -->
+  <path d="M 600 1100 L 600 1135" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrPink)" fill="none" />
+
+
+  <!-- STAGE 4: DETERMINISTIC SECURITY DECISION -->
+  <g transform="translate(40, 1140)">
+    <rect x="0" y="0" width="1120" height="130" rx="12" fill="#881337" stroke="#f43f5e" stroke-width="2" />
+    <text x="20" y="28" fill="#ffe4e6" font-size="14" font-weight="bold">STAGE 4 — DETERMINISTIC SECURITY ACTION &amp; INTERVENTION</text>
+
+    <g transform="translate(20, 40)">
+      <rect x="0" y="0" width="1080" height="70" rx="8" fill="#4c0519" stroke="#9f1239" />
+      <text x="540" y="24" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">POLICY ENGINE OUTPUT ACTIONS</text>
+      <text x="540" y="44" text-anchor="middle" fill="#fecdd3" font-size="11">SAFE / MONITOR → Transparent Operation  |  WARN → Active HUD Banner  |  ALERT → High-Risk Overlay</text>
+      <text x="540" y="60" text-anchor="middle" fill="#fda4af" font-size="11" font-weight="bold">CRITICAL → 10-Second Emergency Intervention Countdown + Automated Family Safety SOS Dispatch</text>
+    </g>
+  </g>
+</svg>

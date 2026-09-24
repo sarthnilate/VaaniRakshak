@@ -11,50 +11,27 @@
 
 Operating under strict **< 200ms per-frame latency constraints**, VAANIRAKSHAK fuses four heterogeneous evidence vectors into a rolling **Gated Recurrent Unit (GRU) temporal risk trajectory**, enforcing progressive intervention policies with a transparent 10-second user-in-the-loop countdown window before taking automated protective action.
 
-```
-                  ┌─────────────────────────────────────────────────────────┐
-                  │                 TELECOM / VOIP CALL                      │
-                  └────────────────────────────┬────────────────────────────┘
-                                               │ Live Audio Stream (2s Chunks)
-                                               v
- ┌──────────────────────────────────────────────────────────────────────────────────────────┐
- │                        VAANIRAKSHAK MULTI-EVIDENCE PIPELINE                             │
- │                                                                                          │
- │  ┌───────────────────────┐  ┌───────────────────────┐  ┌──────────────────────────────┐  │
- │  │   Acoustic Analysis   │  │  Speaker Verification │  │   Multilingual STT & NLP     │  │
- │  │    (WavLM / AASIST)   │  │     (ECAPA-TDNN)      │  │ (faster-whisper + RoBERTa)   │  │
- │  │   Synthetic Score     │  │   Cosine Similarity   │  │ Indic Dialect Detection (8L) │  │
- │  └──────────┬────────────┘  └───────────┬───────────┘  └──────────────┬───────────────┘  │
- └─────────────┼───────────────────────────┼─────────────────────────────┼──────────────────┘
-               │                           │                             │
-               └───────────────────────┐   │   ┌─────────────────────────┘
-                                       v   v   v
-                 ┌──────────────────────────────────────────────────┐
-                 │    GRU Temporal Risk Engine ($0 - 100$)          │
-                 │    Rolling Trajectory State ($h_t = f(h_{t-1}, x_t)$) │
-                 └─────────────────────────┬────────────────────────┘
-                                           v
-                 ┌──────────────────────────────────────────────────┐
-                 │       Dynamic Security Decision Policy           │
-                 │  [SAFE] -> [MONITOR] -> [WARN] -> [ALERT] -> [BLOCK] │
-                 └──────────┬─────────────────────────────┬─────────┘
-                            │                             │
-                            v                             v
-           ┌────────────────────────────────┐ ┌─────────────────────────────────┐
-           │ SYSTEM B: Android Client HUD   │ │ REACT COMMAND CENTER DASHBOARD  │
-           │ Floating Overlay & Intervention│ │ Forensics, Radar & Prov. Graphs │
-           └──────────────┬─────────────────┘ └────────────────┬────────────────┘
-                          │                                    │
-                          v                                    v
-     ┌───────────────────────────────────────────────────────────────┐
-     │ PHASES 10–13: FORENSICS, INDIC NLP, BIOMETRICS & EVALUATOR SANDBOX │
-     │  - SHA-256 Tamper-Evident Evidence Sealing (Section 65B)         │
-     │  - Indic Dialect Support: HI, MR, TA, TE, BN, GU, PA, EN         │
-     │  - Consented 192-d ECAPA-TDNN Biometric Profile Vault            │
-     │  - Dual-Language Citizen Emergency SOS Broadcast (SMS/WhatsApp)  │
-     │  - Interactive Jury Sandbox & Single-Command Showcase Script     │
-     └──────────────────────────────────────────────────────────────────┘
-```
+---
+
+# 🏗️ System Architecture
+
+![VaaniRakshak Primary System Architecture](docs/architecture/01_judge_architecture.svg)
+
+### Architecture at a Glance
+
+VaaniRakshak processes call context and supported real-time audio/event streams through multiple parallel AI evidence engines (Voice Authenticity, Speaker Biometrics, Multilingual STT, and Indic NLP), fuses the resulting signals over time using a rolling GRU temporal state tracker, calculates a dynamic risk score ($0 - 100$), and applies deterministic security policies to provide user-facing protection, 10-second emergency intervention countdowns, and explainable forensic audit trails.
+
+> [!NOTE]
+> **Attack Lab Separation**: Attack Lab is a separate controlled testing and research application (shown inside the dashed boundary). It is NOT part of the VaaniRakshak production user journey or Android app.
+
+### Detailed Architecture Specifications
+
+- 📐 **[Primary System Architecture](docs/architecture/01_judge_architecture.md)** — Complete 20-second visual overview and system workflow.
+- 🤖 **[AI/ML Pipeline Specification](docs/architecture/02_ai_ml_pipeline.md)** — Input $\rightarrow$ Model $\rightarrow$ Output breakdown for all 4 AI engines.
+- ⏱️ **[Real-Time Runtime Sequence](docs/architecture/03_runtime_sequence.md)** — Chronological frame-by-frame streaming & intervention loop.
+- 🐳 **[Deployment & Container Architecture](docs/architecture/04_deployment_architecture.md)** — Docker Compose micro-services, Redis cache & PostgreSQL DB.
+- 🔒 **[Privacy & Security Architecture](docs/architecture/05_privacy_security_architecture.md)** — Data minimization, RAM audio lifecycle & Section 65B SHA-256 evidence sealing.
+- ⚠️ **[Attack Lab Boundary Specification](docs/architecture/06_attack_lab_boundary.md)** — Research harness separation & telecom degradation simulator.
 
 ---
 

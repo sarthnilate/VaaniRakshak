@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1250" width="100%" height="100%" style="background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="privHdrGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+
+    <marker id="arrPriv" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
+    </marker>
+  </defs>
+
+  <!-- HEADER -->
+  <rect x="30" y="25" width="1140" height="70" rx="12" fill="url(#privHdrGrad)" stroke="#10b981" stroke-width="2" />
+  <text x="600" y="58" text-anchor="middle" fill="#f8fafc" font-size="24" font-weight="bold">VAANIRAKSHAK — PRIVACY &amp; SECURITY ARCHITECTURE</text>
+  <text x="600" y="82" text-anchor="middle" fill="#a7f3d0" font-size="13">Data Minimization, Consented Biometrics, SHA-256 Tamper-Evident Evidence Sealing &amp; Section 65B Audit Trail</text>
+
+  <!-- PRIVACY BOUNDARY BOX -->
+  <g transform="translate(40, 120)">
+    <rect x="0" y="0" width="1120" height="460" rx="14" fill="#022c22" stroke="#10b981" stroke-width="2" fill-opacity="0.3" />
+    
+    <rect x="20" y="15" width="340" height="32" rx="6" fill="#064e3b" stroke="#059669" />
+    <text x="190" y="36" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">🔒 PRIVACY-PRESERVING DATA BOUNDARY</text>
+
+    <!-- Pillar 1: Ephemeral Audio Lifecycle -->
+    <g transform="translate(20, 65)">
+      <rect x="0" y="0" width="340" height="370" rx="10" fill="#0f172a" stroke="#059669" stroke-width="1.5" />
+      <rect x="10" y="10" width="320" height="28" rx="5" fill="#064e3b" />
+      <text x="170" y="29" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="bold">1. EPHEMERAL AUDIO LIFECYCLE</text>
+
+      <text x="20" y="60" fill="#6ee7b7" font-size="11" font-weight="bold">ZERO DISK AUDIO RECORDING</text>
+      <text x="20" y="80" fill="#cbd5e1" font-size="11">• Audio PCM chunks exist only in RAM during real-time feature extraction.</text>
+      <text x="20" y="110" fill="#cbd5e1" font-size="11">• As soon as WavLM / AASIST / STT inference completes, raw PCM buffers are freed.</text>
+      <text x="20" y="140" fill="#cbd5e1" font-size="11">• Zero raw audio files are written to disk, databases, or external logs.</text>
+
+      <rect x="15" y="170" width="310" height="180" rx="6" fill="#022c22" stroke="#047857" />
+      <text x="170" y="190" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">RAM INGESTION FLOW</text>
+      <text x="170" y="215" text-anchor="middle" fill="#a7f3d0" font-size="11">Base64 PCM Chunk → RAM Buffer</text>
+      <text x="170" y="235" text-anchor="middle" fill="#a7f3d0" font-size="11">↓</text>
+      <text x="170" y="255" text-anchor="middle" fill="#a7f3d0" font-size="11">Feature Extraction (FFT / Phase)</text>
+      <text x="170" y="275" text-anchor="middle" fill="#a7f3d0" font-size="11">↓</text>
+      <text x="170" y="295" text-anchor="middle" fill="#f43f5e" font-size="11" font-weight="bold">PCM Buffer Discarded Immediately</text>
+      <text x="170" y="315" text-anchor="middle" fill="#6ee7b7" font-size="10">Only structured numerical scores retained</text>
+    </g>
+
+    <!-- Pillar 2: Consented Biometrics -->
+    <g transform="translate(390, 65)">
+      <rect x="0" y="0" width="340" height="370" rx="10" fill="#0f172a" stroke="#059669" stroke-width="1.5" />
+      <rect x="10" y="10" width="320" height="28" rx="5" fill="#064e3b" />
+      <text x="170" y="29" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="bold">2. CONSENTED BIOMETRIC VAULT</text>
+
+      <text x="20" y="60" fill="#6ee7b7" font-size="11" font-weight="bold">EXPLICIT OPT-IN ENROLLMENT</text>
+      <text x="20" y="80" fill="#cbd5e1" font-size="11">• Voice profile enrollment strictly requires explicit user consent modal.</text>
+      <text x="20" y="110" fill="#cbd5e1" font-size="11">• Audio is converted into a 192-d ECAPA-TDNN vector embedding.</text>
+      <text x="20" y="140" fill="#cbd5e1" font-size="11">• Original enrollment voice sample is discarded post-embedding generation.</text>
+
+      <rect x="15" y="170" width="310" height="180" rx="6" fill="#022c22" stroke="#047857" />
+      <text x="170" y="190" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">NON-REVERSIBLE EMBEDDING</text>
+      <text x="170" y="215" text-anchor="middle" fill="#a7f3d0" font-size="11">192-Dimensional Vector Float Array</text>
+      <text x="170" y="235" text-anchor="middle" fill="#a7f3d0" font-size="11">v = [0.042, -0.118, 0.891, ...]</text>
+      <text x="170" y="260" text-anchor="middle" fill="#a7f3d0" font-size="11">Stored in PostgreSQL with pgvector</text>
+      <text x="170" y="290" text-anchor="middle" fill="#6ee7b7" font-size="10">Mathematically impossible to reconstruct original human voice audio from embedding</text>
+    </g>
+
+    <!-- Pillar 3: Ephemeral Redis State & Minimal Storage -->
+    <g transform="translate(760, 65)">
+      <rect x="0" y="0" width="340" height="370" rx="10" fill="#0f172a" stroke="#059669" stroke-width="1.5" />
+      <rect x="10" y="10" width="320" height="28" rx="5" fill="#064e3b" />
+      <text x="170" y="29" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="bold">3. MINIMAL RETENTION &amp; TTL</text>
+
+      <text x="20" y="60" fill="#6ee7b7" font-size="11" font-weight="bold">AUTOMATIC 30-MINUTE EXPIRY</text>
+      <text x="20" y="80" fill="#cbd5e1" font-size="11">• Real-time call session states and streaming buffers live in Redis.</text>
+      <text x="20" y="110" fill="#cbd5e1" font-size="11">• Every key enforces a strict 30-minute Time-To-Live (REDIS_SESSION_TTL_SEC: 1800).</text>
+      <text x="20" y="140" fill="#cbd5e1" font-size="11">• Safe calls leave zero residual footprint in primary database.</text>
+
+      <rect x="15" y="170" width="310" height="180" rx="6" fill="#022c22" stroke="#047857" />
+      <text x="170" y="190" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">STORAGE SEPARATION</text>
+      <text x="25" y="215" fill="#a7f3d0" font-size="11">• Live State: Redis (In-memory, 30m TTL)</text>
+      <text x="25" y="240" fill="#a7f3d0" font-size="11">• High-Risk Incidents: PostgreSQL / SQLite</text>
+      <text x="25" y="265" fill="#a7f3d0" font-size="11">• Retention: Only structured evidence JSON</text>
+      <text x="25" y="295" fill="#6ee7b7" font-size="10">User controls data purge preferences</text>
+    </g>
+  </g>
+
+
+  <!-- SECURITY CONTROLS BOX -->
+  <g transform="translate(40, 600)">
+    <rect x="0" y="0" width="1120" height="600" rx="14" fill="#0f172a" stroke="#0284c7" stroke-width="2" />
+    
+    <rect x="20" y="15" width="360" height="32" rx="6" fill="#0369a1" stroke="#0284c7" />
+    <text x="200" y="36" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="bold">🛡️ HARDENED SECURITY &amp; FORENSICS CONTROLS</text>
+
+    <!-- Control 1: SHA-256 Evidence Chain -->
+    <g transform="translate(20, 65)">
+      <rect x="0" y="0" width="530" height="240" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+      <rect x="10" y="10" width="510" height="28" rx="5" fill="#0284c7" />
+      <text x="265" y="29" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">1. SHA-256 TAMPER-EVIDENT EVIDENCE SEALING</text>
+
+      <text x="20" y="60" fill="#cbd5e1" font-size="11">• Chronological Frame Hashing: Every incoming frame evidence item $E_t$ is hashed with the previous frame's hash:</text>
+      <text x="265" y="85" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="bold">H_t = SHA-256( H_{t-1}  ||  FrameSequence  ||  RiskScore  ||  EvidenceJSON )</text>
+
+      <text x="20" y="115" fill="#cbd5e1" font-size="11">• Guarantees complete cryptographic chain-of-custody integrity under Section 65B of the Indian Evidence Act.</text>
+
+      <rect x="15" y="135" width="500" height="90" rx="6" fill="#0f172a" stroke="#0369a1" />
+      <text x="265" y="155" text-anchor="middle" fill="#7dd3fc" font-size="11" font-weight="bold">FORENSIC DOSSIER EXPORT</text>
+      <text x="265" y="175" text-anchor="middle" fill="#cbd5e1" font-size="11">Generates court-ready Section 65B certificate &amp; CyberCrime 1930 payload</text>
+      <text x="265" y="195" text-anchor="middle" fill="#60a5fa" font-size="10">GET /api/v1/forensics/dossier/{session_id}</text>
+    </g>
+
+    <!-- Control 2: Adversarial Input Hardening -->
+    <g transform="translate(570, 65)">
+      <rect x="0" y="0" width="530" height="240" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+      <rect x="10" y="10" width="510" height="28" rx="5" fill="#0284c7" />
+      <text x="265" y="29" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">2. ADVERSARIAL INPUT HARDENING &amp; BOUNDARY CLAMPING</text>
+
+      <text x="20" y="60" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Score Clamping:</tspan> All synthetic probabilities, speaker similarity metrics, and risk scores are strictly clamped to $[0.0, 1.0]$ or $[0, 100]$.</text>
+      <text x="20" y="90" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Tactic Length Bounding:</tspan> Social engineering tactic lists are bounded to 20 items max to prevent array overflow or memory exhaustion attacks.</text>
+      <text x="20" y="120" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Trusted Contact Rule:</tspan> Policy engine enforces that even trusted contacts cannot bypass risk evaluation if synthetic probability exceeds 0.30.</text>
+
+      <rect x="15" y="145" width="500" height="80" rx="6" fill="#0f172a" stroke="#0369a1" />
+      <text x="265" y="168" text-anchor="middle" fill="#7dd3fc" font-size="11" font-weight="bold">SECURITY HARDENING TEST SUITE VERIFIED</text>
+      <text x="265" y="188" text-anchor="middle" fill="#a7f3d0" font-size="10">backend/tests/test_security_hardening.py — 100% Pass</text>
+    </g>
+
+    <!-- Control 3: Session Isolation & Transport Security -->
+    <g transform="translate(20, 325)">
+      <rect x="0" y="0" width="1080" height="250" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+      <rect x="10" y="10" width="1060" height="28" rx="5" fill="#0284c7" />
+      <text x="540" y="29" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">3. SESSION ISOLATION &amp; SECURE TRANSPORT ARCHITECTURE</text>
+
+      <g transform="translate(20, 50)">
+        <rect x="0" y="0" width="500" height="175" rx="8" fill="#0f172a" stroke="#334155" />
+        <text x="250" y="24" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="bold">Session Hidden State Isolation</text>
+        <text x="15" y="48" fill="#cbd5e1" font-size="11">• Every call session initializes a completely isolated GRU hidden state $h_0 = \vec{0}$.</text>
+        <text x="15" y="70" fill="#cbd5e1" font-size="11">• Zero state leakage occurs across concurrent or consecutive phone calls.</text>
+        <text x="15" y="92" fill="#cbd5e1" font-size="11">• State vector is purged upon session termination or WebSocket disconnect.</text>
+        <text x="15" y="120" fill="#a7f3d0" font-size="10" font-weight="bold">Verified in backend/tests/test_security_hardening.py::TestSessionIsolation</text>
+      </g>
+
+      <g transform="translate(540, 50)">
+        <rect x="0" y="0" width="520" height="175" rx="8" fill="#0f172a" stroke="#334155" />
+        <text x="260" y="24" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="bold">Transport &amp; Secrets Management</text>
+        <text x="15" y="48" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Encryption:</tspan> WSS / HTTPS TLS 1.3 encryption over public interfaces.</text>
+        <text x="15" y="70" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Secrets Management:</tspan> API keys &amp; tokens configured via environment variables (.env).</text>
+        <text x="15" y="92" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">CORS &amp; Headers:</tspan> Configurable allowed origins &amp; strict Security Headers.</text>
+        <text x="15" y="120" fill="#a7f3d0" font-size="10" font-weight="bold">Health Check API Rate Limiting &amp; Input Validation Enforced</text>
+      </g>
+    </g>
+  </g>
+</svg>

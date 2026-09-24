@@ -1,0 +1,83 @@
+graph TD
+    %% -------------------------------------------------------------
+    %% VAANIRAKSHAK PRIMARY SYSTEM ARCHITECTURE (MERMAID SOURCE)
+    %% -------------------------------------------------------------
+
+    classDef edgeStyle fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef ingestStyle fill:#1e1b4b,stroke:#60a5fa,stroke-width:2px,color:#f8fafc;
+    classDef aiStyle fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+    classDef temporalStyle fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
+    classDef riskStyle fill:#4c0519,stroke:#f43f5e,stroke-width:2px,color:#f8fafc;
+    classDef decisionStyle fill:#500724,stroke:#fb7185,stroke-width:2px,color:#f8fafc;
+    classDef outputStyle fill:#022c22,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+    classDef testStyle fill:#451a03,stroke:#f97316,stroke-width:2px,stroke-dasharray: 5 5,color:#fdba74;
+
+    subgraph ATTACK_LAB ["⚠️ ATTACK LAB (Separate Controlled Test / Research Application)"]
+        AL_GEN["Synthetic Scenario Generator<br/>(Bark, Coqui, OpenVoice, Mock)"]
+        AL_DEG["Telecom Degradation Simulator<br/>(AMR-WB, G.711, Jitter, Packet Loss)"]
+        AL_PROV["Provenance & Watermarking<br/>(Cryptographic Verification ID)"]
+        AL_GEN --> AL_DEG --> AL_PROV
+    end
+    class ATTACK_LAB testStyle;
+
+    subgraph LAYER1 ["LAYER 1 — CALL & USER EDGE"]
+        CALL_EVENT["Incoming Call Event<br/>(PSTN / VoIP / Cellular)"]
+        AND_APP["Android Security Client (Kotlin / Compose)<br/>• CallScreeningService & Contact Resolver<br/>• Floating Security HUD Overlay<br/>• Research / Demo Loopback Ingestion"]
+        CALL_EVENT --> AND_APP
+    end
+    class LAYER1 edgeStyle;
+
+    subgraph LAYER2 ["LAYER 2 — REAL-TIME INGESTION (FastAPI)"]
+        INGEST["Audio Pipeline Engine<br/>• 16kHz Mono PCM, 2s Chunks, 1s Rolling Window<br/>• Base64 Decode → Energy VAD → Peak Normalization → Spectrogram FFT"]
+    end
+    class LAYER2 ingestStyle;
+
+    subgraph LAYER3 ["LAYER 3 — AI / ML MULTI-EVIDENCE PIPELINE"]
+        AI_VOICE["1. Voice Authenticity<br/>Model: WavLM / AASIST Engine<br/>Input: 16kHz PCM<br/>Output: synthetic_prob, human_prob, artifact_score"]
+        AI_SPEAKER["2. Speaker Verification<br/>Model: ECAPA-TDNN (192-d)<br/>Input: Audio + Enrolled Vector<br/>Output: speaker_similarity, identity_match"]
+        AI_STT["3. Multilingual STT<br/>Model: faster-whisper Engine<br/>Input: Audio Frame<br/>Output: transcript, detected_lang (HI, MR, EN...)"]
+        AI_INTEL["4. Conversation Intelligence<br/>Model: Multilingual XLM-R + Indic Regex Rules<br/>Input: Transcript + Context<br/>Output: intent, tactics (Urgency/Fear), sensitive_action"]
+    end
+    class LAYER3 aiStyle;
+
+    subgraph LAYER4 ["LAYER 4 — TEMPORAL INTELLIGENCE"]
+        GRU_ENGINE["GRU Rolling State Tracker: h_t = GRU(h_{t-1}, x_t)<br/>Evidence accumulates monotonically under sustained threat:<br/>t1 (22) → t2 (58) → t3 (84) → t4 (94 CRITICAL)"]
+    end
+    class LAYER4 temporalStyle;
+
+    subgraph LAYER5 ["LAYER 5 — MULTI-EVIDENCE FUSION & RISK ENGINE"]
+        RISK_ENGINE["Unified Dynamic Risk Score: 0 – 100<br/>FINAL RISK = MULTI-EVIDENCE (Voice + Speaker + Intent + Tactics) + TEMPORAL HISTORY + CALLER CONTEXT<br/>(Never makes a decision from a single deepfake model alone)"]
+    end
+    class LAYER5 riskStyle;
+
+    subgraph LAYER6 ["LAYER 6 — DETERMINISTIC DECISION ENGINE"]
+        DECISION["Policy Rule Engine<br/>• SAFE (&lt;30) → MONITOR<br/>• LOW/MED (30–79) → WARN<br/>• HIGH (80–89) → ALERT USER<br/>• CRITICAL (90–100) → INTERVENE (10s Countdown Window) + Family SOS"]
+    end
+    class LAYER6 decisionStyle;
+
+    subgraph LAYER7 ["LAYER 7 — OUTPUT & SECURITY ACTION"]
+        OUT_AND["Android Security Client HUD<br/>• Real-Time Risk Badge &amp; Warning Modal<br/>• 10s Emergency Countdown View"]
+        OUT_DASH["React Command Center Dashboard<br/>• Live Risk Radar &amp; Spectrogram Gauge<br/>• Real-Time Multilingual Transcript Stream"]
+        OUT_AUDIT["Incident Forensics &amp; Audit<br/>• SHA-256 Tamper-Evident Evidence Sealing<br/>• Section 65B Cyber Dossier Exporter"]
+    end
+    class LAYER7 outputStyle;
+
+    %% Data Flow Connections
+    AND_APP -- "Call Metadata & PCM Chunks" --> INGEST
+    ATTACK_LAB -. "Test Audio Injection Stream" .-> INGEST
+
+    INGEST -- "Preprocessed Audio Signal" --> AI_VOICE
+    INGEST -- "Preprocessed Audio Signal" --> AI_SPEAKER
+    INGEST -- "Preprocessed Audio Signal" --> AI_STT
+    AI_STT -- "Transcript Stream" --> AI_INTEL
+
+    AI_VOICE -- "synthetic_prob" --> GRU_ENGINE
+    AI_SPEAKER -- "speaker_sim" --> GRU_ENGINE
+    AI_INTEL -- "intent & tactics" --> GRU_ENGINE
+
+    GRU_ENGINE -- "Temporal State Vector h_t" --> RISK_ENGINE
+    RISK_ENGINE -- "Dynamic Risk Score (0-100)" --> DECISION
+
+    DECISION -- "Policy Decision" --> OUT_AND
+    DECISION -- "Telemetry Event" --> OUT_DASH
+    DECISION -- "Evidence Record" --> OUT_AUDIT

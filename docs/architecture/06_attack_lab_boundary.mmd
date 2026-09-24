@@ -1,0 +1,33 @@
+graph TD
+    %% -------------------------------------------------------------
+    %% VAANIRAKSHAK ATTACK LAB BOUNDARY SPECIFICATION (MERMAID SOURCE)
+    %% -------------------------------------------------------------
+
+    classDef atkStyle fill:#451a03,stroke:#f97316,stroke-width:2px,stroke-dasharray: 6 4,color:#fdba74;
+    classDef defStyle fill:#1e1b4b,stroke:#6366f1,stroke-width:2px,color:#f8fafc;
+
+    subgraph SYSTEM_A ["⚠️ SYSTEM A: ATTACK LAB (Separate Controlled Test / Research Application)"]
+        AL_GEN["Modular Voice Generators<br/>(BarkXTTS, Coqui, OpenVoice, Mock)"]
+        AL_DEG["Telecom Degradation Simulator<br/>(AMR-WB, G.711, Jitter, Packet Loss)"]
+        AL_PROV["Provenance Registry &amp; Watermarking<br/>(Cryptographic ID &amp; Ground Truth Tags)"]
+
+        AL_GEN --> AL_DEG --> AL_PROV
+    end
+    class SYSTEM_A atkStyle;
+
+    subgraph SYSTEM_B ["🛡️ SYSTEM B: VAANIRAKSHAK PRODUCTION DEFENSE ECOSYSTEM"]
+        AND_APP["Android Security Client<br/>(CallScreeningService &amp; HUD)"]
+        DEF_INGEST["FastAPI Ingestion &amp; Preprocessing"]
+        DEF_AI["Parallel AI Evidence Pipeline<br/>(Voice, Speaker, STT, Indic NLP)"]
+        DEF_RISK["GRU Temporal Risk State &amp; Policy Engine"]
+        DEF_ACTION["Android HUD Warning &amp; 10s Countdown"]
+        DEF_DASH["React Command Center Dashboard"]
+        DEF_AUDIT["SHA-256 Forensics &amp; Section 65B Dossier"]
+
+        AND_APP --> DEF_INGEST --> DEF_AI --> DEF_RISK --> DEF_ACTION
+        DEF_RISK --> DEF_DASH
+        DEF_RISK --> DEF_AUDIT
+    end
+    class SYSTEM_B defStyle;
+
+    SYSTEM_A -. "Controlled Test Audio Stream Injection" .-> DEF_INGEST

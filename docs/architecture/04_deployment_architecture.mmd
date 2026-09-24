@@ -1,0 +1,58 @@
+graph TD
+    %% -------------------------------------------------------------
+    %% VAANIRAKSHAK DEPLOYMENT & DOCKER ECOSYSTEM (MERMAID SOURCE)
+    %% -------------------------------------------------------------
+
+    classDef clientStyle fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef testStyle fill:#451a03,stroke:#f97316,stroke-width:2px,stroke-dasharray: 5 5,color:#fdba74;
+    classDef dockerStyle fill:#0369a1,stroke:#0284c7,stroke-width:2px,color:#f8fafc;
+    classDef appStyle fill:#312e81,stroke:#6366f1,stroke-width:2px,color:#f8fafc;
+    classDef redisStyle fill:#7f1d1d,stroke:#ef4444,stroke-width:2px,color:#f8fafc;
+    classDef dbStyle fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#f8fafc;
+    classDef dashStyle fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+
+    subgraph CLIENTS ["CLIENT & EDGE ACQUISITION LAYER"]
+        AND_APP["Android Security App (Kotlin)<br/>• CallScreeningService & Policy<br/>• Jetpack Compose HUD<br/>• WebSocket Client"]
+        CARRIER_TAP["Carrier IMS/VoLTE Tap<br/>[PLANNED INTEGRATION]"]
+    end
+    class CLIENTS clientStyle;
+
+    subgraph ATTACK_LAB ["⚠️ ATTACK LAB CONTAINER (RESEARCH HARNESS)"]
+        AL_APP["Attack Lab Scenario Harness<br/>• Voice Generators (Bark/Coqui/Mock)<br/>• Degradation Simulator (AMR-WB)<br/>• Benchmark Injection"]
+    end
+    class ATTACK_LAB testStyle;
+
+    subgraph DOCKER ["DOCKER COMPOSE ECOSYSTEM"]
+        NGINX["Nginx Reverse Proxy & TLS 1.3 Termination<br/>(Port 443 / 80 → 8000 / 5173)"]
+        
+        subgraph CONTAINER_APP ["CONTAINER 1: FastAPI Threat Defense Engine"]
+            FASTAPI["FastAPI / Uvicorn Server (Python 3.11)<br/>• WS Router: /ws/call/{session_id}<br/>• REST API: /api/v1/session, /api/v1/forensics<br/>• AI Pipeline (WavLM, AASIST, ECAPA, Whisper, XLM-R)<br/>• GRU Temporal Tracker & Policy Engine"]
+        end
+        class CONTAINER_APP appStyle;
+
+        subgraph CONTAINER_REDIS ["CONTAINER 2: Redis Session Cache"]
+            REDIS["Redis 7-alpine (redis://localhost:6379/0)<br/>• call:session:{session_id} (Hidden State h_t)<br/>• call:stream:{session_id} (Audio Buffer)<br/>• 30-min Automatic TTL Expiry"]
+        end
+        class CONTAINER_REDIS redisStyle;
+
+        subgraph CONTAINER_DB ["CONTAINER 3: Persistent Database"]
+            PGSQL["PostgreSQL / Supabase (or SQLite fallback)<br/>• users (Policies & Settings)<br/>• enrolled_speakers (192-d pgvector)<br/>• incidents (SHA-256 Forensics Log)"]
+        end
+        class CONTAINER_DB dbStyle;
+
+        subgraph CONTAINER_DASH ["CONTAINER 4: React Dashboard"]
+            REACT["React 18 / Vite / TypeScript App<br/>• Real-Time Risk Radar & Spectrogram<br/>• Live Transcript Stream & Forensics Table<br/>• Interactive Jury Evaluation Sandbox"]
+        end
+        class CONTAINER_DASH dashStyle;
+
+        NGINX --> FASTAPI
+        NGINX --> REACT
+        FASTAPI <--> REDIS
+        FASTAPI <--> PGSQL
+    end
+    class DOCKER dockerStyle;
+
+    AND_APP -- "WebSocket PCM Stream (Port 8000)" --> FASTAPI
+    CARRIER_TAP -. "gRPC Feed (Port 50051)" .-> FASTAPI
+    AL_APP -. "Test Audio Injection (Port 8000)" .-> FASTAPI
+    REACT <--> FASTAPI

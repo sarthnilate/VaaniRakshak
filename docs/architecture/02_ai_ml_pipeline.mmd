@@ -1,0 +1,50 @@
+graph TD
+    %% -------------------------------------------------------------
+    %% VAANIRAKSHAK AI/ML PIPELINE (MERMAID SOURCE)
+    %% -------------------------------------------------------------
+
+    classDef stage1 fill:#1e3a8a,stroke:#3b82f6,stroke-width:2px,color:#f8fafc;
+    classDef stage2 fill:#312e81,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+    classDef stage3 fill:#3b0764,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
+    classDef stage4 fill:#881337,stroke:#f43f5e,stroke-width:2px,color:#f8fafc;
+
+    subgraph STAGE1 ["STAGE 1 — SIGNAL ACQUISITION & SPECTRO-TEMPORAL PREPROCESSING"]
+        PCM["Base64 PCM Audio Input (16kHz, 16-bit Mono)"]
+        VAD["Energy Voice Activity Detection (RMS &gt; 0.01)"]
+        NORM["Peak Amplitude Normalization &amp; Resampling"]
+        SPECT["Spectrogram &amp; FFT Feature Extraction<br/>(RMS, ZCR, Spectral Centroid, Spectral Flatness, Phase Irregularity)"]
+        PCM --> VAD --> NORM --> SPECT
+    end
+    class STAGE1 stage1;
+
+    subgraph STAGE2 ["STAGE 2 — PARALLEL AI/ML INFERENCE ENGINES"]
+        MODEL_A["Model A: Voice Authenticity Engine<br/>• WavLM / AASIST Spectro-Temporal Extractor<br/>• Input: Waveform + Phase Features<br/>• Output: synthetic_prob, human_prob, artifact_score"]
+        MODEL_B["Model B: Speaker Verification Engine<br/>• ECAPA-TDNN 192-d Speaker Encoder<br/>• Input: Audio Chunk + Enrolled Profile Vectors<br/>• Output: speaker_similarity, is_enrolled_match"]
+        MODEL_C["Model C: Multilingual STT (ASR)<br/>• faster-whisper CTranslate2 Engine<br/>• Input: 2s Audio Frame<br/>• Output: transcript, detected_language (HI, MR, EN...)"]
+        MODEL_D["Model D: Conversation Intel &amp; Social Engineering NLP<br/>• XLM-RoBERTa + Multilingual Indic Pattern Matcher (9 Languages)<br/>• Input: Transcript + Context<br/>• Output: intent, tactics (Urgency/Fear), sensitive_request_flag"]
+
+        MODEL_C -- "Transcript Stream" --> MODEL_D
+    end
+    class STAGE2 stage2;
+
+    subgraph STAGE3 ["STAGE 3 — GRU TEMPORAL INTELLIGENCE & MULTI-EVIDENCE FUSION"]
+        GRU["Gated Recurrent Unit (GRU) Temporal Tracker<br/>h_t = GRU(h_{t-1}, x_t)<br/>Inputs: [synth_prob, speaker_sim, intent_score, tactics_score, context]<br/>Monotonic accumulation under scam: t1 (22) → t2 (58) → t3 (84) → t4 (94)"]
+        FUSION["Unified Dynamic Risk Engine (0 – 100)<br/>Score = (synth_prob × 40) + (intent × 30) + (tactics × 15) + (impersonation × 30)<br/>Trusted Contact Exemption: If enrolled match = true AND synth_prob &lt; 0.30 → Cap at 25"]
+        GRU --> FUSION
+    end
+    class STAGE3 stage3;
+
+    subgraph STAGE4 ["STAGE 4 — DETERMINISTIC DECISION & POLICY ENFORCEMENT"]
+        POLICY["Policy Engine Evaluation<br/>• SAFE (&lt;30) → MONITOR<br/>• LOW/MED (30–79) → WARN<br/>• HIGH (80–89) → ALERT USER<br/>• CRITICAL (90–100) → INTERVENE (10s Countdown) + Emergency Family SOS"]
+    end
+    class STAGE4 stage4;
+
+    SPECT --> MODEL_A
+    SPECT --> MODEL_B
+    SPECT --> MODEL_C
+
+    MODEL_A -- "synthetic_prob" --> GRU
+    MODEL_B -- "speaker_sim" --> GRU
+    MODEL_D -- "intent & tactics" --> GRU
+
+    FUSION -- "Dynamic Risk Score (0-100)" --> POLICY

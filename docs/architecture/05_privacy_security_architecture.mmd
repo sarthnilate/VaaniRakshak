@@ -1,0 +1,25 @@
+graph TD
+    %% -------------------------------------------------------------
+    %% VAANIRAKSHAK PRIVACY & SECURITY ARCHITECTURE (MERMAID SOURCE)
+    %% -------------------------------------------------------------
+
+    classDef privStyle fill:#022c22,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+    classDef secStyle fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+
+    subgraph PRIVACY ["🔒 PRIVACY-PRESERVING DATA BOUNDARIES"]
+        EPH_AUDIO["1. Ephemeral Audio Lifecycle<br/>• RAM-Only Base64 PCM Processing<br/>• Immediate Audio Buffer Purge Post Inference<br/>• Zero Raw Audio Saved to Disk"]
+        CONSENT_BIO["2. Consented Biometric Profile Vault<br/>• Explicit User Opt-In Consent Required<br/>• 192-d Non-Reversible ECAPA-TDNN Embedding Vector<br/>• Stored in PostgreSQL with pgvector"]
+        TTL_REDIS["3. Minimal Retention &amp; Automatic TTL<br/>• Ephemeral Live Session State in Redis<br/>• Strict 30-Minute Automatic TTL Expiry<br/>• Safe Calls Leave Zero Residual Database Footprint"]
+    end
+    class PRIVACY privStyle;
+
+    subgraph SECURITY ["🛡️ HARDENED SECURITY & FORENSICS CONTROLS"]
+        CHAIN_SEAL["1. SHA-256 Tamper-Evident Evidence Sealing<br/>• H_t = SHA256( H_{t-1} || FrameSequence || RiskScore || EvidenceJSON )<br/>• Cryptographic Chain-of-Custody Integrity<br/>• Section 65B Cyber Dossier &amp; CyberCrime 1930 Payload"]
+        INPUT_HARD["2. Adversarial Input Hardening &amp; Domain Clamping<br/>• Score Clamping to Valid [0.0, 1.0] Domain<br/>• Social Engineering Tactic Bounding (&le; 20 items)<br/>• Trusted Contact Exemption Cap"]
+        ISOLATION["3. Session Isolation &amp; TLS 1.3 Transport<br/>• Isolated GRU Hidden State Vector h_0 Per Session<br/>• Zero State Leakage Across Calls<br/>• WSS / HTTPS TLS 1.3 Encrypted Data Transit"]
+    end
+    class SECURITY secStyle;
+
+    EPH_AUDIO --> INPUT_HARD
+    CONSENT_BIO --> ISOLATION
+    TTL_REDIS --> CHAIN_SEAL

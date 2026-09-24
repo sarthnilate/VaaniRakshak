@@ -1,0 +1,365 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1600" width="100%" height="100%" style="background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="edgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="ingestGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#312e81" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="riskGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#581c87" />
+      <stop offset="100%" stop-color="#3b0764" />
+    </linearGradient>
+    <linearGradient id="decisionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#831843" />
+      <stop offset="100%" stop-color="#500724" />
+    </linearGradient>
+    <linearGradient id="outputGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    <linearGradient id="attackLabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#451a03" />
+      <stop offset="100%" stop-color="#292524" />
+    </linearGradient>
+
+    <!-- Markers -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+    <marker id="arrowDanger" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e" />
+    </marker>
+    <marker id="arrowWarning" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24" />
+    </marker>
+    <marker id="arrowTest" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fb923c" />
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+    </marker>
+  </defs>
+
+  <!-- TITLE HEADER -->
+  <rect x="30" y="25" width="1140" height="70" rx="12" fill="#1e293b" stroke="#334155" stroke-width="2" />
+  <text x="600" y="58" text-anchor="middle" fill="#f8fafc" font-size="24" font-weight="bold">VAANIRAKSHAK (वाणीरक्षक) — PRIMARY SYSTEM ARCHITECTURE</text>
+  <text x="600" y="82" text-anchor="middle" fill="#94a3b8" font-size="13">Multi-Evidence Real-Time Voice Security &amp; Fraud Prevention Engine · SIH 2026</text>
+
+  <!-- SEPARATE ATTACK LAB BOX (DASHED) -->
+  <g transform="translate(850, 120)">
+    <rect x="0" y="0" width="310" height="240" rx="12" fill="url(#attackLabGrad)" stroke="#f97316" stroke-width="2" stroke-dasharray="6,4" />
+    <rect x="10" y="10" width="290" height="28" rx="6" fill="#ea580c" />
+    <text x="155" y="29" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">ATTACK LAB (RESEARCH / DEMO)</text>
+    <text x="155" y="52" text-anchor="middle" fill="#fdba74" font-size="11" font-weight="600">SEPARATE CONTROLLED TEST APPLICATION</text>
+
+    <rect x="15" y="65" width="280" height="40" rx="6" fill="#292524" stroke="#78350f" />
+    <text x="155" y="82" text-anchor="middle" fill="#fdba74" font-size="11">Synthetic Scenario Generator</text>
+    <text x="155" y="97" text-anchor="middle" fill="#a8a29e" font-size="10">(Bark, Coqui, OpenVoice, Mock)</text>
+
+    <rect x="15" y="115" width="280" height="40" rx="6" fill="#292524" stroke="#78350f" />
+    <text x="155" y="132" text-anchor="middle" fill="#fdba74" font-size="11">Telecom Degradation Simulator</text>
+    <text x="155" y="147" text-anchor="middle" fill="#a8a29e" font-size="10">(AMR-WB, G.711, Jitter, Packet Loss)</text>
+
+    <rect x="15" y="165" width="280" height="40" rx="6" fill="#292524" stroke="#78350f" />
+    <text x="155" y="182" text-anchor="middle" fill="#fdba74" font-size="11">Provenance &amp; Watermarking</text>
+    <text x="155" y="197" text-anchor="middle" fill="#a8a29e" font-size="10">(Cryptographic Verification ID)</text>
+    
+    <text x="155" y="224" text-anchor="middle" fill="#fb923c" font-size="10" font-style="italic">Not part of production user journey</text>
+  </g>
+
+  <!-- ATTACK LAB TO INGESTION ARROW -->
+  <path d="M 850 240 L 720 240" stroke="#f97316" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrowTest)" fill="none" />
+  <rect x="735" y="223" width="105" height="18" rx="4" fill="#451a03" />
+  <text x="787" y="236" text-anchor="middle" fill="#fdba74" font-size="10">Test Audio Stream</text>
+
+
+  <!-- LAYER 1: CALL / USER EDGE -->
+  <g transform="translate(40, 120)">
+    <rect x="0" y="0" width="670" height="130" rx="12" fill="url(#edgeGrad)" stroke="#38bdf8" stroke-width="2" />
+    <text x="20" y="30" fill="#38bdf8" font-size="14" font-weight="bold">LAYER 1 — CALL &amp; USER EDGE</text>
+
+    <!-- Sub components -->
+    <g transform="translate(20, 45)">
+      <rect x="0" y="0" width="180" height="65" rx="8" fill="#0f172a" stroke="#475569" />
+      <text x="90" y="25" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="bold">Incoming Call Event</text>
+      <text x="90" y="45" text-anchor="middle" fill="#94a3b8" font-size="11">PSTN / VoIP / Cellular</text>
+    </g>
+
+    <g transform="translate(220, 45)">
+      <rect x="0" y="0" width="430" height="65" rx="8" fill="#0f172a" stroke="#0284c7" />
+      <text x="215" y="22" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="bold">Android Security Client (Kotlin / Jetpack Compose)</text>
+      <text x="215" y="42" text-anchor="middle" fill="#cbd5e1" font-size="11">• CallScreeningService &amp; Contact Resolver  • Floating HUD Overlay</text>
+      <text x="215" y="56" text-anchor="middle" fill="#94a3b8" font-size="10">• Audio stream via supported research mode / operator feed boundary</text>
+    </g>
+  </g>
+
+  <!-- ARROW L1 -> L2 -->
+  <path d="M 375 250 L 375 285" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+  <rect x="300" y="257" width="150" height="18" rx="4" fill="#1e293b" />
+  <text x="375" y="270" text-anchor="middle" fill="#7dd3fc" font-size="10">Call Metadata &amp; PCM Chunks</text>
+
+
+  <!-- LAYER 2: REAL-TIME INGESTION -->
+  <g transform="translate(40, 290)">
+    <rect x="0" y="0" width="670" height="100" rx="12" fill="url(#ingestGrad)" stroke="#60a5fa" stroke-width="2" />
+    <text x="20" y="28" fill="#60a5fa" font-size="14" font-weight="bold">LAYER 2 — REAL-TIME INGESTION &amp; PREPROCESSING (FastAPI)</text>
+    
+    <g transform="translate(20, 40)">
+      <rect x="0" y="0" width="630" height="45" rx="8" fill="#1e1b4b" stroke="#4338ca" />
+      <text x="315" y="22" text-anchor="middle" fill="#e0e7ff" font-size="12" font-weight="600">Audio Pipeline Engine (16kHz Mono PCM, 2s Chunks, 1s Rolling Window)</text>
+      <text x="315" y="38" text-anchor="middle" fill="#a5b4fc" font-size="11">Base64 Decode → Energy VAD → Peak Normalization → Spectrogram FFT Feature Extraction</text>
+    </g>
+  </g>
+
+  <!-- ARROW L2 -> L3 -->
+  <path d="M 375 390 L 375 425" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+  <rect x="300" y="397" width="150" height="18" rx="4" fill="#1e1b4b" />
+  <text x="375" y="410" text-anchor="middle" fill="#a5b4fc" font-size="10">Preprocessed Audio Signal</text>
+
+
+  <!-- LAYER 3: AI / ML MULTI-EVIDENCE ENGINES -->
+  <g transform="translate(40, 430)">
+    <rect x="0" y="0" width="1120" height="320" rx="12" fill="url(#aiGrad)" stroke="#818cf8" stroke-width="2" />
+    <text x="20" y="30" fill="#a5b4fc" font-size="14" font-weight="bold">LAYER 3 — AI / ML MULTI-EVIDENCE ANALYSIS LAYER (Parallel Inference)</text>
+
+    <!-- Engine 1: Voice Authenticity -->
+    <g transform="translate(20, 48)">
+      <rect x="0" y="0" width="260" height="250" rx="10" fill="#0f172a" stroke="#6366f1" stroke-width="1.5" />
+      <rect x="10" y="10" width="240" height="28" rx="6" fill="#312e81" />
+      <text x="130" y="29" text-anchor="middle" fill="#818cf8" font-size="12" font-weight="bold">1. VOICE AUTHENTICITY</text>
+
+      <text x="15" y="60" fill="#94a3b8" font-size="11" font-weight="bold">INPUT:</text>
+      <text x="65" y="60" fill="#cbd5e1" font-size="11">16kHz PCM Waveform</text>
+
+      <text x="15" y="85" fill="#94a3b8" font-size="11" font-weight="bold">MODEL:</text>
+      <text x="65" y="85" fill="#818cf8" font-size="11" font-weight="bold">WavLM / AASIST Engine</text>
+      <text x="15" y="100" fill="#64748b" font-size="10">Spectro-temporal phase artifacts</text>
+
+      <line x1="15" y1="115" x2="245" y2="115" stroke="#334155" stroke-width="1" />
+
+      <text x="15" y="135" fill="#94a3b8" font-size="11" font-weight="bold">OUTPUT SIGNALS:</text>
+      <text x="25" y="155" fill="#f43f5e" font-size="11">• synthetic_prob (0.00 – 1.00)</text>
+      <text x="25" y="175" fill="#34d399" font-size="11">• human_prob (0.00 – 1.00)</text>
+      <text x="25" y="195" fill="#cbd5e1" font-size="11">• artifact_score (0.00 – 1.00)</text>
+      <text x="25" y="215" fill="#cbd5e1" font-size="11">• confidence (e.g. 0.92)</text>
+
+      <rect x="10" y="225" width="240" height="18" rx="4" fill="#1e1b4b" />
+      <text x="130" y="238" text-anchor="middle" fill="#c7d2fe" font-size="10">Target Latency: &lt; 35 ms</text>
+    </g>
+
+    <!-- Engine 2: Speaker Verification -->
+    <g transform="translate(295, 48)">
+      <rect x="0" y="0" width="260" height="250" rx="10" fill="#0f172a" stroke="#6366f1" stroke-width="1.5" />
+      <rect x="10" y="10" width="240" height="28" rx="6" fill="#312e81" />
+      <text x="130" y="29" text-anchor="middle" fill="#818cf8" font-size="12" font-weight="bold">2. SPEAKER VERIFICATION</text>
+
+      <text x="15" y="60" fill="#94a3b8" font-size="11" font-weight="bold">INPUT:</text>
+      <text x="65" y="60" fill="#cbd5e1" font-size="11">Voice Segment + Enrolled Profile</text>
+
+      <text x="15" y="85" fill="#94a3b8" font-size="11" font-weight="bold">MODEL:</text>
+      <text x="65" y="85" fill="#818cf8" font-size="11" font-weight="bold">ECAPA-TDNN (192-d)</text>
+      <text x="15" y="100" fill="#64748b" font-size="10">Cosine embedding matcher</text>
+
+      <line x1="15" y1="115" x2="245" y2="115" stroke="#334155" stroke-width="1" />
+
+      <text x="15" y="135" fill="#94a3b8" font-size="11" font-weight="bold">OUTPUT SIGNALS:</text>
+      <text x="25" y="155" fill="#cbd5e1" font-size="11">• speaker_similarity (0–1.0)</text>
+      <text x="25" y="175" fill="#cbd5e1" font-size="11">• is_enrolled_match (true/false)</text>
+      <text x="25" y="195" fill="#fbbf24" font-size="11">• identity_mismatch_alert</text>
+      <text x="25" y="215" fill="#cbd5e1" font-size="11">• confidence (e.g. 0.91)</text>
+
+      <rect x="10" y="225" width="240" height="18" rx="4" fill="#1e1b4b" />
+      <text x="130" y="238" text-anchor="middle" fill="#c7d2fe" font-size="10">Target Latency: &lt; 20 ms</text>
+    </g>
+
+    <!-- Engine 3: Multilingual STT -->
+    <g transform="translate(570, 48)">
+      <rect x="0" y="0" width="260" height="250" rx="10" fill="#0f172a" stroke="#6366f1" stroke-width="1.5" />
+      <rect x="10" y="10" width="240" height="28" rx="6" fill="#312e81" />
+      <text x="130" y="29" text-anchor="middle" fill="#818cf8" font-size="12" font-weight="bold">3. MULTILINGUAL STT</text>
+
+      <text x="15" y="60" fill="#94a3b8" font-size="11" font-weight="bold">INPUT:</text>
+      <text x="65" y="60" fill="#cbd5e1" font-size="11">Audio Frame (2s chunk)</text>
+
+      <text x="15" y="85" fill="#94a3b8" font-size="11" font-weight="bold">MODEL:</text>
+      <text x="65" y="85" fill="#818cf8" font-size="11" font-weight="bold">faster-whisper Engine</text>
+      <text x="15" y="100" fill="#64748b" font-size="10">Streaming VAD + Indic ASR</text>
+
+      <line x1="15" y1="115" x2="245" y2="115" stroke="#334155" stroke-width="1" />
+
+      <text x="15" y="135" fill="#94a3b8" font-size="11" font-weight="bold">OUTPUT SIGNALS:</text>
+      <text x="25" y="155" fill="#38bdf8" font-size="11">• transcript (Text string)</text>
+      <text x="25" y="175" fill="#cbd5e1" font-size="11">• detected_lang (HI, MR, EN...)</text>
+      <text x="25" y="195" fill="#cbd5e1" font-size="11">• lang_confidence (0–1.0)</text>
+      <text x="25" y="215" fill="#cbd5e1" font-size="11">• word_timestamps</text>
+
+      <rect x="10" y="225" width="240" height="18" rx="4" fill="#1e1b4b" />
+      <text x="130" y="238" text-anchor="middle" fill="#c7d2fe" font-size="10">Target Latency: &lt; 90 ms</text>
+    </g>
+
+    <!-- Engine 4: Conversation Intelligence -->
+    <g transform="translate(845, 48)">
+      <rect x="0" y="0" width="255" height="250" rx="10" fill="#0f172a" stroke="#6366f1" stroke-width="1.5" />
+      <rect x="10" y="10" width="235" height="28" rx="6" fill="#312e81" />
+      <text x="127" y="29" text-anchor="middle" fill="#818cf8" font-size="12" font-weight="bold">4. CONVERSATION INTEL</text>
+
+      <text x="15" y="60" fill="#94a3b8" font-size="11" font-weight="bold">INPUT:</text>
+      <text x="65" y="60" fill="#cbd5e1" font-size="11">Transcript + Caller Context</text>
+
+      <text x="15" y="85" fill="#94a3b8" font-size="11" font-weight="bold">MODEL:</text>
+      <text x="65" y="85" fill="#818cf8" font-size="11" font-weight="bold">Multilingual NLP / XLM-R</text>
+      <text x="15" y="100" fill="#64748b" font-size="10">Intent &amp; Social Engineering Engine</text>
+
+      <line x1="15" y1="115" x2="240" y2="115" stroke="#334155" stroke-width="1" />
+
+      <text x="15" y="135" fill="#94a3b8" font-size="11" font-weight="bold">OUTPUT SIGNALS:</text>
+      <text x="25" y="155" fill="#f43f5e" font-size="11">• intent (OTP/Money/Bank...)</text>
+      <text x="25" y="175" fill="#fbbf24" font-size="11">• tactics (Urgency/Fear/Authority)</text>
+      <text x="25" y="195" fill="#cbd5e1" font-size="11">• sensitive_request_flag</text>
+      <text x="25" y="215" fill="#cbd5e1" font-size="11">• fraud_confidence</text>
+
+      <rect x="10" y="225" width="235" height="18" rx="4" fill="#1e1b4b" />
+      <text x="127" y="238" text-anchor="middle" fill="#c7d2fe" font-size="10">Target Latency: &lt; 25 ms</text>
+    </g>
+  </g>
+
+  <!-- ARROWS FROM L3 ENGINES TO L4 TEMPORAL INTELLIGENCE -->
+  <path d="M 170 750 L 170 780 L 600 780 L 600 810" stroke="#818cf8" stroke-width="1.5" marker-end="url(#arrow)" fill="none" />
+  <path d="M 425 750 L 425 780 L 600 780" stroke="#818cf8" stroke-width="1.5" fill="none" />
+  <path d="M 700 750 L 700 780 L 600 780" stroke="#818cf8" stroke-width="1.5" fill="none" />
+  <path d="M 972 750 L 972 780 L 600 780" stroke="#818cf8" stroke-width="1.5" fill="none" />
+
+  <rect x="490" y="771" width="220" height="18" rx="4" fill="#312e81" />
+  <text x="600" y="784" text-anchor="middle" fill="#e0e7ff" font-size="10">Parallel Evidence Vectors (Synth, Sim, Intent, Tactics)</text>
+
+
+  <!-- LAYER 4: TEMPORAL INTELLIGENCE -->
+  <g transform="translate(40, 815)">
+    <rect x="0" y="0" width="1120" height="110" rx="12" fill="url(#riskGrad)" stroke="#c084fc" stroke-width="2" />
+    <text x="20" y="28" fill="#e9d5ff" font-size="14" font-weight="bold">LAYER 4 — TEMPORAL INTELLIGENCE (GRU State Recurrence Engine)</text>
+
+    <g transform="translate(20, 38)">
+      <rect x="0" y="0" width="1080" height="58" rx="8" fill="#3b0764" stroke="#7e22ce" />
+      <text x="540" y="22" text-anchor="middle" fill="#f3e8ff" font-size="12" font-weight="bold">Rolling Threat State Tracker: h_t = GRU(h_{t-1}, x_t)</text>
+      <text x="540" y="42" text-anchor="middle" fill="#d8b4fe" font-size="11">Evidence accumulates monotonically under sustained threat: t1 (22) → t2 (58) → t3 (84) → t4 (94 CRITICAL)</text>
+    </g>
+  </g>
+
+  <!-- ARROW L4 -> L5 -->
+  <path d="M 600 925 L 600 960" stroke="#c084fc" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+  <rect x="510" y="932" width="180" height="18" rx="4" fill="#581c87" />
+  <text x="600" y="945" text-anchor="middle" fill="#f3e8ff" font-size="10">Temporal State Vector h_t</text>
+
+
+  <!-- LAYER 5: MULTI-EVIDENCE FUSION & RISK ENGINE -->
+  <g transform="translate(40, 965)">
+    <rect x="0" y="0" width="1120" height="120" rx="12" fill="url(#riskGrad)" stroke="#f43f5e" stroke-width="2" />
+    <text x="20" y="28" fill="#fecdd3" font-size="14" font-weight="bold">LAYER 5 — MULTI-EVIDENCE FUSION &amp; DYNAMIC RISK ENGINE</text>
+
+    <g transform="translate(20, 38)">
+      <rect x="0" y="0" width="1080" height="68" rx="8" fill="#4c0519" stroke="#9f1239" />
+      <text x="540" y="22" text-anchor="middle" fill="#ffe4e6" font-size="13" font-weight="bold">UNIFIED DYNAMIC RISK SCORE: 0 – 100</text>
+      <text x="540" y="42" text-anchor="middle" fill="#fda4af" font-size="11">FINAL RISK = MULTI-EVIDENCE SIGNALS (Voice + Speaker + Intent + Tactics) + TEMPORAL HISTORY + CALLER CONTEXT</text>
+      <text x="540" y="58" text-anchor="middle" fill="#f43f5e" font-size="11" font-weight="bold">CRITICAL PRINCIPLE: SYSTEM NEVER MAKES A SECURITY DECISION FROM A SINGLE DEEPFAKE MODEL OUTPUT ALONE</text>
+    </g>
+  </g>
+
+  <!-- ARROW L5 -> L6 -->
+  <path d="M 600 1085 L 600 1120" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrowDanger)" fill="none" />
+  <rect x="510" y="1092" width="180" height="18" rx="4" fill="#881337" />
+  <text x="600" y="1105" text-anchor="middle" fill="#ffe4e6" font-size="10">Risk Score &amp; Evidence Payload</text>
+
+
+  <!-- LAYER 6: DECISION ENGINE -->
+  <g transform="translate(40, 1125)">
+    <rect x="0" y="0" width="1120" height="130" rx="12" fill="url(#decisionGrad)" stroke="#fb7185" stroke-width="2" />
+    <text x="20" y="28" fill="#ffe4e6" font-size="14" font-weight="bold">LAYER 6 — DETERMINISTIC DECISION &amp; POLICY ENGINE (Rule-Based Policy Enforcement)</text>
+
+    <!-- Risk Bands -->
+    <g transform="translate(20, 42)">
+      <!-- SAFE -->
+      <rect x="0" y="0" width="205" height="70" rx="8" fill="#064e3b" stroke="#10b981" />
+      <text x="102" y="25" text-anchor="middle" fill="#a7f3d0" font-size="12" font-weight="bold">SAFE (&lt; 30)</text>
+      <text x="102" y="45" text-anchor="middle" fill="#6ee7b7" font-size="11">Action: MONITOR</text>
+      <text x="102" y="60" text-anchor="middle" fill="#047857" font-size="10">Transparent operation</text>
+
+      <!-- LOW / MEDIUM -->
+      <rect x="220" y="0" width="205" height="70" rx="8" fill="#78350f" stroke="#f59e0b" />
+      <text x="322" y="25" text-anchor="middle" fill="#fde68a" font-size="12" font-weight="bold">LOW / MED (30–79)</text>
+      <text x="322" y="45" text-anchor="middle" fill="#fcd34d" font-size="11">Action: MONITOR / WARN</text>
+      <text x="322" y="60" text-anchor="middle" fill="#b45309" font-size="10">Subtle HUD indicator</text>
+
+      <!-- HIGH -->
+      <rect x="440" y="0" width="205" height="70" rx="8" fill="#7c2d12" stroke="#ea580c" />
+      <text x="542" y="25" text-anchor="middle" fill="#ffedd5" font-size="12" font-weight="bold">HIGH (80–89)</text>
+      <text x="542" y="45" text-anchor="middle" fill="#fed7aa" font-size="11">Action: ALERT USER</text>
+      <text x="542" y="60" text-anchor="middle" fill="#c2410c" font-size="10">Active warning overlay</text>
+
+      <!-- CRITICAL -->
+      <rect x="660" y="0" width="400" height="70" rx="8" fill="#881337" stroke="#f43f5e" stroke-width="2" />
+      <text x="860" y="25" text-anchor="middle" fill="#ffe4e6" font-size="13" font-weight="bold">CRITICAL (90 – 100)</text>
+      <text x="860" y="45" text-anchor="middle" fill="#fecdd3" font-size="11" font-weight="bold">Action: INTERVENE (10-Second Countdown Window)</text>
+      <text x="860" y="61" text-anchor="middle" fill="#fda4af" font-size="10">Automated Call Protection Recommendation + Emergency Family SOS Dispatch</text>
+    </g>
+  </g>
+
+  <!-- ARROWS FROM L6 TO OUTPUT TARGETS -->
+  <path d="M 300 1255 L 300 1295" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)" fill="none" />
+  <path d="M 600 1255 L 600 1295" stroke="#a7f3d0" stroke-width="2" marker-end="url(#arrowGreen)" fill="none" />
+  <path d="M 900 1255 L 900 1295" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrowDanger)" fill="none" />
+
+
+  <!-- LAYER 7: OUTPUT & SECURITY ACTION -->
+  <g transform="translate(40, 1300)">
+    <rect x="0" y="0" width="1120" height="150" rx="12" fill="url(#outputGrad)" stroke="#10b981" stroke-width="2" />
+    <text x="20" y="28" fill="#a7f3d0" font-size="14" font-weight="bold">LAYER 7 — ANDROID EXPERIENCE &amp; COMMAND CENTER DASHBOARD</text>
+
+    <!-- Target 1: Android Client -->
+    <g transform="translate(20, 40)">
+      <rect x="0" y="0" width="340" height="95" rx="8" fill="#022c22" stroke="#059669" />
+      <text x="170" y="22" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="bold">1. ANDROID SECURITY HUD</text>
+      <text x="170" y="40" text-anchor="middle" fill="#a7f3d0" font-size="11">• Real-Time Risk Badge &amp; Warning Modal</text>
+      <text x="170" y="58" text-anchor="middle" fill="#a7f3d0" font-size="11">• 10s Countdown Emergency Intervention View</text>
+      <text x="170" y="76" text-anchor="middle" fill="#6ee7b7" font-size="10">• Plain-Language Security Explanations</text>
+    </g>
+
+    <!-- Target 2: Dashboard -->
+    <g transform="translate(380, 40)">
+      <rect x="0" y="0" width="360" height="95" rx="8" fill="#022c22" stroke="#059669" />
+      <text x="180" y="22" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="bold">2. REACT COMMAND CENTER DASHBOARD</text>
+      <text x="180" y="40" text-anchor="middle" fill="#a7f3d0" font-size="11">• WebSocket Live Risk Radar &amp; Spectrogram</text>
+      <text x="180" y="58" text-anchor="middle" fill="#a7f3d0" font-size="11">• Real-Time Multilingual Transcript Stream</text>
+      <text x="180" y="76" text-anchor="middle" fill="#6ee7b7" font-size="10">• Interactive Jury Evaluation Sandbox</text>
+    </g>
+
+    <!-- Target 3: Forensics & Audit -->
+    <g transform="translate(760, 40)">
+      <rect x="0" y="0" width="340" height="95" rx="8" fill="#022c22" stroke="#059669" />
+      <text x="170" y="22" text-anchor="middle" fill="#6ee7b7" font-size="12" font-weight="bold">3. INCIDENT FORENSICS &amp; AUDIT</text>
+      <text x="170" y="40" text-anchor="middle" fill="#a7f3d0" font-size="11">• SHA-256 Tamper-Evident Evidence Sealing</text>
+      <text x="170" y="58" text-anchor="middle" fill="#a7f3d0" font-size="11">• Section 65B Cyber Dossier Exporter</text>
+      <text x="170" y="76" text-anchor="middle" fill="#6ee7b7" font-size="10">• CyberCrime 1930 Payload Generator</text>
+    </g>
+  </g>
+
+  <!-- CROSS-CUTTING PRIVACY & SECURITY BOUNDARY (FOOTER BOX) -->
+  <g transform="translate(40, 1470)">
+    <rect x="0" y="0" width="1120" height="95" rx="10" fill="#0f172a" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,4" />
+    <text x="20" y="25" fill="#38bdf8" font-size="12" font-weight="bold">🔒 CROSS-CUTTING PRIVACY &amp; SECURITY BOUNDARIES</text>
+
+    <text x="35" y="48" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Data Minimization:</tspan> Raw audio is processed ephemerally in RAM and immediately discarded; zero raw call audio is saved to disk.</text>
+    <text x="35" y="66" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Biometric Consent:</tspan> 192-d speaker embeddings are encrypted and stored only with explicit user consent.</text>
+    <text x="35" y="84" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Storage Separation:</tspan> Ephemeral state lives in Redis (30-min TTL); persistent audit metadata lives in PostgreSQL / SQLite.</text>
+
+    <text x="800" y="48" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Transport:</tspan> WSS / HTTPS TLS 1.3 Encryption</text>
+    <text x="800" y="66" fill="#cbd5e1" font-size="11">• <tspan font-weight="bold">Tamper Evidence:</tspan> SHA-256 Frame Hash Chains</text>
+  </g>
+</svg>

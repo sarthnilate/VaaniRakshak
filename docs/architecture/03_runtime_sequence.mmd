@@ -1,0 +1,49 @@
+sequenceDiagram
+    autonumber
+    actor Caller as Caller / Edge
+    actor Android as Android Client HUD
+    participant Ingest as FastAPI Ingestion Buffer
+    participant AI as Parallel AI Engines
+    participant GRU as GRU Temporal Engine
+    participant Policy as Policy & Decision Engine
+    participant Dash as React Dashboard
+    participant Audit as Forensics & SOS Dispatcher
+
+    Caller->>Android: Incoming Call Event
+    Android->>Ingest: WebSocket Handshake (/ws/call/{session_id})
+    
+    rect rgb(30, 27, 75)
+        note right of Android: Streaming Frame Loop (Every 1–2s Chunk)
+        Android->>Ingest: Base64 PCM Audio Chunk
+        Ingest->>AI: Dispatch Preprocessed Waveform & Spectrogram Features
+        
+        par Voice Authenticity
+            AI->>AI: WavLM/AASIST Inference (synth_prob: 0.94)
+        and Speaker Verification
+            AI->>AI: ECAPA-TDNN Cosine Match (speaker_sim: 0.42)
+        and Multilingual STT
+            AI->>AI: faster-whisper ASR (transcript text)
+        and Conversation Intelligence
+            AI->>AI: XLM-R + Indic NLP (intent: MONEY_TRANSFER, tactics: URGENCY)
+        end
+
+        AI->>GRU: Parallel Evidence Vector E_t
+        GRU->>GRU: Update Rolling Hidden State h_t = GRU(h_{t-1}, E_t)
+        GRU->>Policy: Evaluate Dynamic Risk Score (R_t = 94 CRITICAL)
+        
+        Policy->>Policy: Match Policy Rules: Band = CRITICAL, Action = INTERVENE
+        
+        Policy-->>Android: Risk Update Payload (CRITICAL + 10s Countdown)
+        Policy-->>Dash: Telemetry Update (Live Risk Radar & Spectrogram)
+        
+        Android->>Android: Render Floating Warning & 10s Intervention Countdown Overlay
+        
+        opt Risk >= 90 (CRITICAL)
+            Policy-->>Audit: Dispatch Dual-Language Family Safety SOS Alert
+            Policy-->>Audit: Seal Evidence Frame with SHA-256 Hash Chain
+        end
+    end
+
+    note over Android, Audit: Call Termination & Post-Call Forensics
+    Android->>Ingest: Call Teardown Event
+    Ingest->>Audit: Generate Section 65B Dossier & CyberCrime 1930 Payload
